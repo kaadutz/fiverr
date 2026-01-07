@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Styles dari HTML asli */
+/* Custom Styles */
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
 }
@@ -11,10 +11,10 @@
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #fdf7e3; /* cream-parchment */
+  background: #fdf7e3; 
 }
 ::-webkit-scrollbar-thumb {
-  background: #b8860b; /* primary */
+  background: #b8860b; 
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -22,5 +22,26 @@
 }
 
 .image-sensory-filter {
-  filter: saturate(1.2) contrast(1.1) brightness(1.05);
+  filter: saturate(1.1) contrast(1.1);
 }
+
+/* --- ANIMASI TAMBAHAN --- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Class pembantu untuk delay animasi */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
