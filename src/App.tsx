@@ -5,7 +5,6 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   
   // State untuk Theme (Dark/Light)
-  // Cek localStorage dulu, jika tidak ada default ke 'light'
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';
@@ -13,7 +12,6 @@ function App() {
     return 'light';
   });
 
-  // Efek untuk menerapkan class 'dark' ke elemen HTML
   useEffect(() => {
     if (theme === 'dark') {
       document.documentElement.classList.add('dark');
@@ -23,12 +21,10 @@ function App() {
     localStorage.setItem('theme', theme);
   }, [theme]);
 
-  // Fungsi toggle theme
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
-  // Efek untuk mendeteksi scroll agar navbar berubah transparan/solid
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -37,12 +33,11 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Fungsi untuk Smooth Scroll ke section tertentu
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false); // Tutup menu mobile jika diklik
+      setIsMenuOpen(false);
     }
   };
 
@@ -58,29 +53,26 @@ function App() {
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-300">
       <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         
-        {/* --- HEADER / NAVBAR --- */}
+        {/* --- HEADER / NAVBAR (UPDATED: FIXED) --- */}
+        {/* Menggunakan 'fixed' agar navbar mengambang di atas konten dan selalu ikut saat scroll */}
         <header 
-          className={`sticky top-0 z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-300 ${
+          className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-300 ${
             scrolled 
               ? 'bg-cream-parchment/95 dark:bg-forest-deep/95 shadow-md backdrop-blur-sm py-3' 
               : 'bg-transparent py-5'
           }`}
         >
-          {/* LOGO SECTION */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            {/* GANTI LOGO DISINI */}
             <img 
               src="/logo-fiverr.png" 
               alt="Fiverr Culinary Logo" 
               className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform duration-300"
             />
-            {/* Teks Logo (Opsional - disembunyikan di HP biar rapi) */}
             <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
               Beranda Kuliner <br/><span className="text-primary">NTB</span>
             </h2>
           </div>
           
-          {/* Desktop Menu */}
           <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
             <nav className="flex items-center gap-8">
               <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="text-forest-deep dark:text-text-light text-sm font-bold hover:text-primary transition-colors">Beranda</button>
@@ -89,7 +81,6 @@ function App() {
               <button onClick={() => scrollToSection('contact')} className="text-forest-deep dark:text-text-light text-sm font-bold hover:text-primary transition-colors">Kontak</button>
             </nav>
 
-            {/* Tombol Dark Mode (Desktop) */}
             <button 
               onClick={toggleTheme}
               className="p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all"
@@ -108,9 +99,7 @@ function App() {
             </button>
           </div>
 
-          {/* Mobile Actions (Theme Toggle + Menu Button) */}
           <div className="lg:hidden flex items-center gap-4">
-            {/* Tombol Dark Mode (Mobile) */}
             <button 
               onClick={toggleTheme}
               className="p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged active:scale-95 transition-all"
@@ -131,7 +120,6 @@ function App() {
           </div>
         </header>
 
-        {/* --- MOBILE MENU DROPDOWN (NEW) --- */}
         {isMenuOpen && (
           <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/95 dark:bg-forest-deep/95 backdrop-blur-md pt-24 px-6 animate-fade-in-up">
             <nav className="flex flex-col gap-6 text-center">
@@ -152,7 +140,6 @@ function App() {
 
         {/* --- HERO SECTION --- */}
         <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-          {/* Background Image with Overlay */}
           <div 
             className="absolute inset-0 bg-cover bg-center" 
             style={{ backgroundImage: `url("${heroImage}")` }}
@@ -189,11 +176,10 @@ function App() {
           </div>
         </section>
 
-        {/* --- MENU SECTION (Kelepon & Es Poteng) --- */}
-        <section className="px-4 lg:px-20 py-24 bg-cream-parchment dark:bg-forest-deep relative transition-colors duration-300" id="menu">
+        {/* --- MENU SECTION (Added scroll-mt-32) --- */}
+        <section className="px-4 lg:px-20 py-24 bg-cream-parchment dark:bg-forest-deep relative transition-colors duration-300 scroll-mt-32" id="menu">
           <div className="container mx-auto max-w-[1200px]">
             
-            {/* Section Header */}
             <div className="text-center mb-20 animate-fade-in-up">
               <div className="flex items-center justify-center gap-4 text-primary font-display font-bold tracking-widest uppercase text-sm mb-4">
                 <span className="w-12 h-[2px] bg-primary"></span>
@@ -210,7 +196,6 @@ function App() {
 
             {/* ITEM 1: KELEPON KECERIT */}
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-32 group">
-              {/* Text Side */}
               <div className="lg:w-1/2 order-2 lg:order-1">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="bg-primary/20 text-primary p-2 rounded-full">
@@ -228,7 +213,6 @@ function App() {
                   Rp 15.000 <span className="text-base text-secondary/60 dark:text-gray-500 font-body font-normal">/ porsi</span>
                 </div>
 
-                {/* Features Grid */}
                 <div className="grid grid-cols-3 gap-4 mb-8">
                   {[
                     {icon: 'water_drop', title: 'Gula Aren Asli', desc: 'Lumer sempurna di mulut'},
@@ -248,7 +232,6 @@ function App() {
                 </button>
               </div>
 
-              {/* Image Side */}
               <div className="lg:w-1/2 order-1 lg:order-2 relative">
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500">
                   <img src={keleponImage} alt="Kelepon Kecerit" className="w-full h-[500px] object-cover image-sensory-filter hover:scale-110 transition-transform duration-700" />
@@ -259,7 +242,6 @@ function App() {
 
             {/* ITEM 2: ES POTENG */}
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-              {/* Image Side */}
               <div className="lg:w-1/2 relative">
                 <div className="relative rounded-3xl overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500">
                   <img src={esPotengImage} alt="Es Poteng" className="w-full h-[500px] object-cover image-sensory-filter hover:scale-110 transition-transform duration-700" />
@@ -267,7 +249,6 @@ function App() {
                 </div>
               </div>
 
-              {/* Text Side */}
               <div className="lg:w-1/2">
                 <h3 className="text-4xl lg:text-5xl font-display font-bold text-forest-deep dark:text-text-light mb-6">
                   Es Poteng
@@ -279,7 +260,6 @@ function App() {
                   Rp 12.000 <span className="text-base text-secondary/60 dark:text-gray-500 font-body font-normal">/ mangkuk</span>
                 </div>
 
-                {/* Features List */}
                 <div className="space-y-4 mb-8">
                   {[
                     {icon: 'thumb_up', title: 'Tape Singkong Pilihan', desc: 'Singkong berkualitas tinggi yang difermentasi dengan sempurna', color: 'bg-blue-100 text-blue-600'},
@@ -307,11 +287,10 @@ function App() {
           </div>
         </section>
 
-        {/* --- ABOUT SECTION (PKKWU) --- */}
-        <section className="px-4 lg:px-20 py-24 bg-gold-aged/10 dark:bg-forest-deep/80 transition-colors duration-300" id="about">
+        {/* --- ABOUT SECTION (Added scroll-mt-32) --- */}
+        <section className="px-4 lg:px-20 py-24 bg-gold-aged/10 dark:bg-forest-deep/80 transition-colors duration-300 scroll-mt-32" id="about">
           <div className="container mx-auto max-w-[900px]">
             <div className="bg-cream-parchment dark:bg-forest-deep border border-gold-aged/20 rounded-[3rem] p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
-              {/* Background decorative blob */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/10 rounded-full blur-3xl"></div>
               
               <div className="relative z-10">
@@ -343,15 +322,13 @@ function App() {
           </div>
         </section>
 
-        {/* --- FOOTER --- */}
-        <footer className="bg-forest-deep text-white py-16 px-6 lg:px-20 border-t-4 border-primary" id="contact">
+        {/* --- FOOTER (Added scroll-mt-32) --- */}
+        <footer className="bg-forest-deep text-white py-16 px-6 lg:px-20 border-t-4 border-primary scroll-mt-32" id="contact">
           <div className="container mx-auto max-w-[1200px]">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
               
-              {/* Brand */}
               <div>
                 <div className="flex items-center gap-2 text-gold-aged mb-6">
-                  {/* Footer Logo (optional, pakai text saja biar rapi) */}
                   <span className="material-symbols-outlined text-3xl">restaurant</span>
                   <h3 className="text-xl font-display font-bold leading-tight">Beranda Kuliner <br/>NTB</h3>
                 </div>
@@ -360,7 +337,6 @@ function App() {
                 </p>
               </div>
 
-              {/* Menu Links */}
               <div>
                 <h4 className="text-gold-aged font-bold mb-6">Menu</h4>
                 <ul className="space-y-3 text-sm text-gray-300">
@@ -370,7 +346,6 @@ function App() {
                 </ul>
               </div>
 
-              {/* Contact */}
               <div>
                 <h4 className="text-gold-aged font-bold mb-6">Kontak</h4>
                 <ul className="space-y-3 text-sm text-gray-300">
@@ -386,7 +361,6 @@ function App() {
                 </ul>
               </div>
 
-              {/* Socials */}
               <div>
                 <h4 className="text-gold-aged font-bold mb-6">Ikuti Kami</h4>
                 <div className="flex gap-4">
