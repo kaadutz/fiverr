@@ -90,7 +90,7 @@ function App() {
               className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
             />
             <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
-              Beranda Kuliner <br/><span className="text-primary">NTB</span>
+              Kuliner <br/><span className="text-primary">Nusa Tenggara Barat</span>
             </h2>
           </div>
           
@@ -117,7 +117,7 @@ function App() {
             </button>
 
             <a 
-              href={createWaLink("Halo, saya ingin memesan menu dari Beranda Kuliner.")}
+              href={createWaLink("Halo, saya ingin memesan menu dari Fiver.")}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-10 items-center justify-center rounded-full bg-primary px-6 text-white transition-transform hover:scale-105 hover:bg-gold-aged text-sm font-display font-bold shadow-lg shadow-primary/30"
@@ -323,7 +323,7 @@ function App() {
                   Dibuat dengan Cinta oleh Kelompok Fiver
                 </h2>
                 <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-12 font-body">
-                  Kami berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Beranda Kuliner</span>, kami memperkenalkan kekayaan rasa Bumi Gora kepada dunia.
+                  Kami berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Produk kami</span>, hadir memperkenalkan kekayaan rasa Bumi Gora kepada dunia.
                 </p>
 
                 {/* Updated Values Grid */}
