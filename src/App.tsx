@@ -117,7 +117,7 @@ function App() {
             </button>
 
             <a 
-              href={createWaLink("Halo, saya ingin memesan menu dari Beranda Kuliner NTB.")}
+              href={createWaLink("Halo, saya ingin memesan menu dari Beranda Kuliner.")}
               target="_blank"
               rel="noopener noreferrer"
               className="flex h-10 items-center justify-center rounded-full bg-primary px-6 text-white transition-transform hover:scale-105 hover:bg-gold-aged text-sm font-display font-bold shadow-lg shadow-primary/30"
@@ -320,10 +320,10 @@ function App() {
                   <span className="material-symbols-outlined text-4xl">groups</span>
                 </div>
                 <h2 className="text-3xl sm:text-5xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 leading-tight">
-                  Dibuat dengan Cinta oleh Kelompok PKKWU
+                  Dibuat dengan Cinta oleh Kelompok Fiver
                 </h2>
                 <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-12 font-body">
-                  Kami berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Beranda Kuliner NTB</span>, kami memperkenalkan kekayaan rasa Bumi Gora kepada dunia.
+                  Kami berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Beranda Kuliner</span>, kami memperkenalkan kekayaan rasa Bumi Gora kepada dunia.
                 </p>
 
                 {/* Updated Values Grid */}
@@ -332,7 +332,7 @@ function App() {
                     { 
                       icon: 'agriculture', 
                       title: 'Bahan Baku 100%', 
-                      desc: 'Organik dari petani lokal NTB' 
+                      desc: 'Organik dari petani lokal' 
                     },
                     { 
                       icon: 'recycling', 
@@ -396,7 +396,7 @@ function App() {
                     <a href={`https://wa.me/${waNumber}`} className="hover:text-primary">+62 818-0785-2840</a>
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-xs">location_on</span> Mataram, NTB
+                    <span className="material-symbols-outlined text-xs">location_on</span> Jakarta
                   </li>
                 </ul>
               </div>
@@ -421,7 +421,7 @@ function App() {
             </div>
 
             <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-body">
-              <p>© 2025 Kelompok PKKWU. All rights reserved.</p>
+              <p>© 2025 Kelompok Fiver. All rights reserved.</p>
               <div className="flex gap-6 mt-4 md:mt-0">
                 <a href="#" className="hover:text-white">Privacy Policy</a>
                 <a href="#" className="hover:text-white">Terms of Service</a>
