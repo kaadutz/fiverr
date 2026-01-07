@@ -53,13 +53,13 @@ function App() {
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-300">
       <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         
-        {/* --- HEADER / NAVBAR (UPDATED: FIXED) --- */}
-        {/* Menggunakan 'fixed' agar navbar mengambang di atas konten dan selalu ikut saat scroll */}
+        {/* --- HEADER / NAVBAR (FIXED) --- */}
         <header 
           className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-300 ${
             scrolled 
-              ? 'bg-cream-parchment/95 dark:bg-white/95 shadow-md backdrop-blur-sm py-3' 
-              : 'bg-transparent py-5'
+              // PERBAIKAN: Menggunakan dark:bg-forest-deep/95 agar serasi dengan mode gelap
+              ? 'bg-cream-parchment/95 dark:bg-forest-deep/95 shadow-md backdrop-blur-sm py-3 border-b border-transparent dark:border-gold-aged/20' 
+              : 'bg-transparent py-5 border-b border-transparent'
           }`}
         >
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
