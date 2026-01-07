@@ -3,6 +3,30 @@ import { useState, useEffect } from 'react';
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  
+  // State untuk Theme (Dark/Light)
+  // Cek localStorage dulu, jika tidak ada default ke 'light'
+  const [theme, setTheme] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('theme') || 'light';
+    }
+    return 'light';
+  });
+
+  // Efek untuk menerapkan class 'dark' ke elemen HTML
+  useEffect(() => {
+    if (theme === 'dark') {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  // Fungsi toggle theme
+  const toggleTheme = () => {
+    setTheme(prev => prev === 'light' ? 'dark' : 'light');
+  };
 
   // Efek untuk mendeteksi scroll agar navbar berubah transparan/solid
   useEffect(() => {
@@ -25,17 +49,13 @@ function App() {
   // =========================================
   // BAGIAN GAMBAR LOKAL
   // =========================================
-  // Pastikan file gambar dengan nama persis seperti di bawah ini
-  // sudah ada di dalam folder 'public' di proyek Anda.
-  
   const heroImage = "/hero-bg.png";
   const keleponImage = "/kelepon.png";
   const esPotengImage = "/es-poteng.png";
   // =========================================
 
-
   return (
-    <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white">
+    <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-300">
       <div className="relative flex min-h-screen w-full flex-col overflow-x-hidden">
         
         {/* --- HEADER / NAVBAR --- */}
@@ -46,23 +66,40 @@ function App() {
               : 'bg-transparent py-5'
           }`}
         >
+          {/* LOGO SECTION */}
           <div className="flex items-center gap-3 cursor-pointer" onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})}>
-            <div className="flex size-10 items-center justify-center rounded-lg bg-primary text-white shadow-lg">
-              <span className="material-symbols-outlined text-2xl">restaurant_menu</span>
-            </div>
-            <h2 className="text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
+            {/* GANTI LOGO DISINI */}
+            <img 
+              src="/logo-fiverr.png" 
+              alt="Fiverr Culinary Logo" 
+              className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform duration-300"
+            />
+            {/* Teks Logo (Opsional - disembunyikan di HP biar rapi) */}
+            <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
               Beranda Kuliner <br/><span className="text-primary">NTB</span>
             </h2>
           </div>
           
           {/* Desktop Menu */}
-          <div className="hidden lg:flex flex-1 justify-end gap-8 items-center">
+          <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
             <nav className="flex items-center gap-8">
               <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="text-forest-deep dark:text-text-light text-sm font-bold hover:text-primary transition-colors">Beranda</button>
               <button onClick={() => scrollToSection('menu')} className="text-forest-deep dark:text-text-light text-sm font-bold hover:text-primary transition-colors">Menu</button>
               <button onClick={() => scrollToSection('about')} className="text-forest-deep dark:text-text-light text-sm font-bold hover:text-primary transition-colors">Tentang Kami</button>
               <button onClick={() => scrollToSection('contact')} className="text-forest-deep dark:text-text-light text-sm font-bold hover:text-primary transition-colors">Kontak</button>
             </nav>
+
+            {/* Tombol Dark Mode (Desktop) */}
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all"
+              title={theme === 'dark' ? "Ganti ke Light Mode" : "Ganti ke Dark Mode"}
+            >
+              <span className="material-symbols-outlined text-xl align-middle">
+                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
+
             <button 
               onClick={() => scrollToSection('menu')}
               className="flex h-10 cursor-pointer items-center justify-center rounded-full bg-primary px-6 text-white transition-transform hover:scale-105 hover:bg-gold-aged text-sm font-display font-bold shadow-lg shadow-primary/30"
@@ -71,14 +108,47 @@ function App() {
             </button>
           </div>
 
-          {/* Mobile Menu Button */}
-          <button 
-            className="lg:hidden p-2 text-forest-deep dark:text-text-light"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            <span className="material-symbols-outlined text-3xl">menu</span>
-          </button>
+          {/* Mobile Actions (Theme Toggle + Menu Button) */}
+          <div className="lg:hidden flex items-center gap-4">
+            {/* Tombol Dark Mode (Mobile) */}
+            <button 
+              onClick={toggleTheme}
+              className="p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged active:scale-95 transition-all"
+            >
+              <span className="material-symbols-outlined text-xl align-middle">
+                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
+              </span>
+            </button>
+
+            <button 
+              className="p-2 text-forest-deep dark:text-text-light active:scale-95 transition-transform"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <span className="material-symbols-outlined text-3xl">
+                {isMenuOpen ? 'close' : 'menu'}
+              </span>
+            </button>
+          </div>
         </header>
+
+        {/* --- MOBILE MENU DROPDOWN (NEW) --- */}
+        {isMenuOpen && (
+          <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/95 dark:bg-forest-deep/95 backdrop-blur-md pt-24 px-6 animate-fade-in-up">
+            <nav className="flex flex-col gap-6 text-center">
+              <button onClick={() => scrollToSection('root')} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged hover:text-primary">Beranda</button>
+              <button onClick={() => scrollToSection('menu')} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged hover:text-primary">Menu</button>
+              <button onClick={() => scrollToSection('about')} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged hover:text-primary">Tentang Kami</button>
+              <button onClick={() => scrollToSection('contact')} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged hover:text-primary">Kontak</button>
+              <hr className="border-forest-deep/10 dark:border-white/10 my-2" />
+              <button 
+                onClick={() => scrollToSection('menu')}
+                className="w-full py-4 rounded-full bg-primary text-white font-bold text-xl shadow-lg"
+              >
+                Pesan Sekarang
+              </button>
+            </nav>
+          </div>
+        )}
 
         {/* --- HERO SECTION --- */}
         <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
@@ -120,7 +190,7 @@ function App() {
         </section>
 
         {/* --- MENU SECTION (Kelepon & Es Poteng) --- */}
-        <section className="px-4 lg:px-20 py-24 bg-cream-parchment dark:bg-forest-deep relative" id="menu">
+        <section className="px-4 lg:px-20 py-24 bg-cream-parchment dark:bg-forest-deep relative transition-colors duration-300" id="menu">
           <div className="container mx-auto max-w-[1200px]">
             
             {/* Section Header */}
@@ -238,7 +308,7 @@ function App() {
         </section>
 
         {/* --- ABOUT SECTION (PKKWU) --- */}
-        <section className="px-4 lg:px-20 py-24 bg-gold-aged/10 dark:bg-forest-deep/80" id="about">
+        <section className="px-4 lg:px-20 py-24 bg-gold-aged/10 dark:bg-forest-deep/80 transition-colors duration-300" id="about">
           <div className="container mx-auto max-w-[900px]">
             <div className="bg-cream-parchment dark:bg-forest-deep border border-gold-aged/20 rounded-[3rem] p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
               {/* Background decorative blob */}
@@ -281,6 +351,7 @@ function App() {
               {/* Brand */}
               <div>
                 <div className="flex items-center gap-2 text-gold-aged mb-6">
+                  {/* Footer Logo (optional, pakai text saja biar rapi) */}
                   <span className="material-symbols-outlined text-3xl">restaurant</span>
                   <h3 className="text-xl font-display font-bold leading-tight">Beranda Kuliner <br/>NTB</h3>
                 </div>
