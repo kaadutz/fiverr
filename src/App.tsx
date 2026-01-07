@@ -22,12 +22,17 @@ function App() {
     }
   };
 
-  // --- GAMBAR ---
-  // Catatan: Ganti URL ini dengan file lokal Anda jika ingin 100% sama persis.
-  // Masukkan gambar ke folder 'public', lalu ganti link jadi "/namagambar.jpg"
-  const heroImage = "https://images.unsplash.com/photo-1626074353765-517a681e40be?q=80&w=1887&auto=format&fit=crop"; // Suasana meja makan gelap
-  const keleponImage = "https://cdn.idntimes.com/content-images/community/2021/11/20211116-104936-e970a0928256a6a127f5c0936e76159c-0975877c3e38167f677587d498144b61.jpg"; // Klepon Hijau
-  const esPotengImage = "https://asset.kompas.com/crops/O3fJqV9_C8pZkKzX-C5gW_J7C-k=/0x0:1000x667/750x500/data/photo/2023/03/10/640ad7a3a8301.jpg"; // Es Putih Creamy
+  // =========================================
+  // BAGIAN GAMBAR LOKAL
+  // =========================================
+  // Pastikan file gambar dengan nama persis seperti di bawah ini
+  // sudah ada di dalam folder 'public' di proyek Anda.
+  
+  const heroImage = "/hero-bg.jpg";
+  const keleponImage = "/kelepon.jpg";
+  const esPotengImage = "/es-poteng.jpg";
+  // =========================================
+
 
   return (
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white">
