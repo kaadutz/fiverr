@@ -58,6 +58,7 @@ function App() {
           className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-300 ${
             scrolled 
               // PERBAIKAN: Menggunakan dark:bg-forest-deep/95 agar serasi dengan mode gelap
+              // Ditambah border tipis dark:border-gold-aged/20 untuk pemanis
               ? 'bg-cream-parchment/95 dark:bg-forest-deep/95 shadow-md backdrop-blur-sm py-3 border-b border-transparent dark:border-gold-aged/20' 
               : 'bg-transparent py-5 border-b border-transparent'
           }`}
