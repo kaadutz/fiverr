@@ -41,6 +41,14 @@ function App() {
     }
   };
 
+  // --- KOMPONEN PEMISAH (GARIS) ---
+  // Ini adalah garis custom dengan gradasi emas biar elegan
+  const SectionDivider = () => (
+    <div className="w-full flex justify-center items-center py-12 lg:py-20">
+      <div className="h-px bg-gradient-to-r from-transparent via-gold-aged/50 to-transparent w-full max-w-4xl"></div>
+    </div>
+  );
+
   // =========================================
   // BAGIAN GAMBAR LOKAL
   // =========================================
@@ -50,13 +58,12 @@ function App() {
   // =========================================
 
   return (
-    // UBAH DISINI: Menambahkan gradasi background untuk dark mode dan pattern
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-300 relative">
       
-      {/* Pattern Overlay untuk Dark Mode agar tidak monoton */}
+      {/* Pattern Overlay */}
       <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-5 bg-heritage-pattern z-0 mix-blend-overlay"></div>
       
-      {/* Gradient Overlay untuk memberikan efek 'vignette' atau kedalaman */}
+      {/* Gradient Overlay */}
       <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 bg-gradient-to-b from-transparent via-black/20 to-black/60 z-0"></div>
 
       <div className="relative z-10 flex min-h-screen w-full flex-col overflow-x-hidden">
@@ -76,13 +83,12 @@ function App() {
               className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm hover:scale-105 transition-transform duration-300"
             />
             <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
-              Beranda Kuliner <br/><span className="text-primary">NTB</span>
+              Beranda Kuliner <br/><span className="text-primary">Nusa Tenggara Barat</span>
             </h2>
           </div>
           
           <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
             <nav className="flex items-center gap-8">
-              {/* Menu items dengan hover effect yang lebih terang di dark mode */}
               {['Beranda', 'Menu', 'Tentang Kami', 'Kontak'].map((item, idx) => {
                  const target = item === 'Beranda' ? 'root' : item === 'Tentang Kami' ? 'about' : item === 'Kontak' ? 'contact' : 'menu';
                  const action = item === 'Beranda' ? () => window.scrollTo({top: 0, behavior: 'smooth'}) : () => scrollToSection(target);
@@ -158,13 +164,12 @@ function App() {
             style={{ backgroundImage: `url("${heroImage}")` }}
           >
             <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
-            {/* Gradient disesuaikan supaya nyambung ke section bawah */}
             <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent"></div>
           </div>
 
           <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
             <span className="rounded-full bg-white/10 backdrop-blur-md px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] text-gold-aged border border-gold-aged/50 mb-6 inline-block shadow-xl">
-              Kualitas Rasa Bumi Gora
+              Kualitas Rasa Bumi Mataram
             </span>
             <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
               Cita Rasa Asli Nusantara <br/>
@@ -191,7 +196,6 @@ function App() {
         </section>
 
         {/* --- MENU SECTION --- */}
-        {/* Background section ini dibuat transparan agar pattern & gradient dari body terlihat */}
         <section className="px-4 lg:px-20 py-24 relative transition-colors duration-300 scroll-mt-32" id="menu">
           <div className="container mx-auto max-w-[1200px]">
             
@@ -210,8 +214,7 @@ function App() {
             </div>
 
             {/* ITEM 1: KELEPON KECERIT */}
-            {/* UBAH DISINI: Memberikan background kartu yang berbeda agar kontras */}
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-32 group p-6 lg:p-10 rounded-3xl transition-all duration-300 hover:bg-white/50 dark:hover:bg-white/5 border border-transparent hover:border-gold-aged/20">
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 p-6 lg:p-10 rounded-3xl transition-all duration-300 hover:bg-white/50 dark:hover:bg-white/5 border border-transparent hover:border-gold-aged/20">
               <div className="lg:w-1/2 order-2 lg:order-1">
                 <div className="flex items-center gap-2 mb-4">
                   <span className="bg-primary/20 text-primary p-2 rounded-full">
@@ -255,6 +258,9 @@ function App() {
                 </div>
               </div>
             </div>
+
+            {/* --- PEMISAH ANTAR MENU --- */}
+            <SectionDivider />
 
             {/* ITEM 2: ES POTENG */}
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 p-6 lg:p-10 rounded-3xl transition-all duration-300 hover:bg-white/50 dark:hover:bg-white/5 border border-transparent hover:border-gold-aged/20">
@@ -303,11 +309,13 @@ function App() {
           </div>
         </section>
 
+        {/* --- PEMISAH SECTION --- */}
+        <SectionDivider />
+
         {/* --- ABOUT SECTION --- */}
         <section className="px-4 lg:px-20 py-24 bg-gold-aged/10 dark:bg-black/20 transition-colors duration-300 scroll-mt-32 backdrop-blur-sm" id="about">
           <div className="container mx-auto max-w-[900px]">
             <div className="bg-cream-parchment dark:bg-[#052e21] border border-gold-aged/20 rounded-[3rem] p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
-              {/* Dekorasi blob hijau */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 rounded-full blur-3xl mix-blend-screen"></div>
               
               <div className="relative z-10">
@@ -315,7 +323,7 @@ function App() {
                   <span className="material-symbols-outlined text-4xl">groups</span>
                 </div>
                 <h2 className="text-4xl lg:text-5xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 leading-tight">
-                  Dibuat dengan Cinta oleh Kelompok PKKWU
+                  Dibuat dengan Cinta oleh Kelompok Fiver
                 </h2>
                 <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-12">
                   Kami adalah sekumpulan siswa yang berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Beranda Kuliner NTB</span>, kami ingin memperkenalkan kekayaan rasa Bumi Gora kepada dunia, satu gigitan pada satu waktu.
@@ -340,7 +348,6 @@ function App() {
         </section>
 
         {/* --- FOOTER --- */}
-        {/* Footer diberi warna sangat gelap untuk menutup halaman */}
         <footer className="bg-forest-deep dark:bg-[#021812] text-white py-16 px-6 lg:px-20 border-t-4 border-primary scroll-mt-32" id="contact">
           <div className="container mx-auto max-w-[1200px]">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
@@ -360,7 +367,7 @@ function App() {
                 <ul className="space-y-3 text-sm text-gray-300">
                   <li><a href="#" className="hover:text-primary transition-colors">Kelepon Kecerit</a></li>
                   <li><a href="#" className="hover:text-primary transition-colors">Es Poteng</a></li>
-                  <li><a href="#" className="hover:text-primary transition-colors">Paket Hemat</a></li>
+                  
                 </ul>
               </div>
 
@@ -368,13 +375,13 @@ function App() {
                 <h4 className="text-gold-aged font-bold mb-6">Kontak</h4>
                 <ul className="space-y-3 text-sm text-gray-300">
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-xs">call</span> +62 812-3456-7890
+                    <span className="material-symbols-outlined text-xs">call</span> +62 818-0785-2840
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-xs">mail</span> info@kulinerntb.id
+                    <span className="material-symbols-outlined text-xs">mail</span> info@fiver@gmail.com
                   </li>
                   <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-xs">location_on</span> Mataram, NTB
+                    <span className="material-symbols-outlined text-xs">location_on</span> SMKN 71 Jakarta Timur
                   </li>
                 </ul>
               </div>
@@ -392,7 +399,7 @@ function App() {
             </div>
 
             <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
-              <p>© 2025 Kelompok PKKWU. All rights reserved.</p>
+              <p>© 2025 Kelompok Fiver. All rights reserved.</p>
               <div className="flex gap-6 mt-4 md:mt-0">
                 <a href="#" className="hover:text-white">Privacy Policy</a>
                 <a href="#" className="hover:text-white">Terms of Service</a>
