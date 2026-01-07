@@ -3,11 +3,26 @@ import { useState } from 'react';
 function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Placeholder images - dalam project asli sebaiknya import gambar lokal
+  // =========================================
+  // BAGIAN INI UNTUK MENGGANTI GAMBAR
+  // =========================================
+  // Catatan: Link ini mengambil langsung dari website berita (hotlinking).
+  // Jika suatu saat gambar hilang, artinya website pemilik gambar memblokir aksesnya.
+  // Cara terbaik: Download gambar Anda sendiri, masukkan ke folder 'public', lalu ganti linknya menjadi "/nama-gambar.jpg"
+  
+  // Gambar Hero (Background utama) - Saya pakai placeholder pemandangan NTB/Lombok
   const heroImage = "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?q=80&w=1974&auto=format&fit=crop"; 
+  
+  // Gambar Signature Creations (Piring besar) - Saya pakai placeholder makanan traditional
   const signatureImage = "https://images.unsplash.com/photo-1555126634-323283e090fa?q=80&w=1000&auto=format&fit=crop";
-  const keleponImage = "https://cdn.idntimes.com/content-images/community/2021/11/20211116-104936-e970a0928256a6a127f5c0936e76159c-0975877c3e38167f677587d498144b61.jpg"; // Contoh gambar Kelepon
-  const esPotengImage = "https://asset.kompas.com/crops/O3fJqV9_C8pZkKzX-C5gW_J7C-k=/0x0:1000x667/750x500/data/photo/2023/03/10/640ad7a3a8301.jpg"; // Contoh gambar Es
+  
+  // Gambar Kelepon (Mengambil dari sumber IDNTimes yang relevan dengan link asli)
+  const keleponImage = "https://cdn.idntimes.com/content-images/community/2021/11/20211116-104936-e970a0928256a6a127f5c0936e76159c-0975877c3e38167f677587d498144b61.jpg"; 
+  
+  // Gambar Es Poteng (Mengambil dari sumber Kompas yang relevan dengan link asli)
+  const esPotengImage = "https://asset.kompas.com/crops/O3fJqV9_C8pZkKzX-C5gW_J7C-k=/0x0:1000x667/750x500/data/photo/2023/03/10/640ad7a3a8301.jpg";
+  // =========================================
+
 
   return (
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen">
@@ -74,7 +89,7 @@ function App() {
           </div>
         </section>
 
-        {/* Introduction / Signature Section */}
+        {/* Signature Section */}
         <section className="px-4 lg:px-20 py-16 bg-cream-parchment dark:bg-forest-deep relative overflow-hidden" id="menu">
           <div className="container mx-auto max-w-[1400px]">
             <div className="flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-24 relative z-10">
@@ -219,38 +234,6 @@ function App() {
                 >
                   <div className="absolute inset-0 bg-black/15 group-hover:bg-transparent transition-colors"></div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* About Section */}
-        <section className="px-4 lg:px-20 py-24 bg-emerald-dark/10 dark:bg-forest-deep/60 relative overflow-hidden" id="about">
-          <div className="absolute top-0 right-0 w-80 h-80 bg-gold-aged/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 opacity-60"></div>
-          <div className="container mx-auto max-w-[1000px] text-center flex flex-col items-center gap-10 relative z-10 bg-cream-parchment/80 dark:bg-forest-deep/80 p-12 rounded-3xl shadow-xl border border-gold-aged/20 dark:border-emerald-dark/20 backdrop-blur-sm">
-            <div className="size-20 bg-primary/10 rounded-full flex items-center justify-center text-primary mb-2">
-              <span className="material-symbols-outlined text-4xl">groups</span>
-            </div>
-            <h2 className="text-forest-deep dark:text-gold-aged text-5xl font-display font-bold leading-tight">Crafted with Passion: Our Culinary Collective</h2>
-            <p className="text-secondary dark:text-gray-300 text-xl font-body leading-relaxed max-w-3xl">
-              We are a dedicated collective, bound by a shared love for Nusantara's culinary soul. Through <span className="font-bold text-primary">Symphony of Flavors</span>, we invite you to experience the rich tapestry of Bumi Gora, one exquisite dish at a time, each crafted with immense care and respect for tradition.
-            </p>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-10 w-full mt-10 pt-10 border-t border-gold-aged/20 dark:border-emerald-dark/20">
-              <div className="flex flex-col gap-3">
-                <span className="text-5xl font-display font-black text-forest-deep dark:text-gold-aged">100%</span>
-                <span className="text-sm text-secondary/80 dark:text-gray-400 font-body uppercase tracking-wider">Local Bounty</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <span className="text-5xl font-display font-black text-forest-deep dark:text-gold-aged">50+</span>
-                <span className="text-sm text-secondary/80 dark:text-gray-400 font-body uppercase tracking-wider">Daily Delights</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <span className="text-5xl font-display font-black text-forest-deep dark:text-gold-aged">4.9</span>
-                <span className="text-sm text-secondary/80 dark:text-gray-400 font-body uppercase tracking-wider">Taste Score</span>
-              </div>
-              <div className="flex flex-col gap-3">
-                <span className="text-5xl font-display font-black text-forest-deep dark:text-gold-aged">24h</span>
-                <span className="text-sm text-secondary/80 dark:text-gray-400 font-body uppercase tracking-wider">Seamless Service</span>
               </div>
             </div>
           </div>
