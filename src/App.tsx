@@ -58,7 +58,7 @@ function App() {
         <header 
           className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-300 ${
             scrolled 
-              ? 'bg-cream-parchment/95 dark:bg-forest-deep/95 shadow-md backdrop-blur-sm py-3' 
+              ? 'bg-cream-parchment/95 dark:bg-white/95 shadow-md backdrop-blur-sm py-3' 
               : 'bg-transparent py-5'
           }`}
         >
