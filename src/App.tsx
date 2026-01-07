@@ -28,9 +28,9 @@ function App() {
   // Pastikan file gambar dengan nama persis seperti di bawah ini
   // sudah ada di dalam folder 'public' di proyek Anda.
   
-  const heroImage = "/hero-bg.jpg";
-  const keleponImage = "/kelepon.jpg";
-  const esPotengImage = "/es-poteng.jpg";
+  const heroImage = "/hero-bg.png";
+  const keleponImage = "/kelepon.png";
+  const esPotengImage = "/es-poteng.png";
   // =========================================
 
 
