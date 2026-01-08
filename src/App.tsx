@@ -1,104 +1,91 @@
 import { useState, useEffect } from 'react';
 
-// Tipe Data untuk Produk dan Item Keranjang
+// --- TIPE DATA ---
 interface Product {
   id: string;
   name: string;
   price: number;
   image: string;
+  description: string; // Deskripsi untuk popup detail
+  category: string;
 }
 
 interface CartItem extends Product {
   quantity: number;
 }
 
+interface CustomerInfo {
+  name: string;
+  email: string;
+  address: string;
+}
+
 function App() {
+  // --- STATE MANAGEMENT ---
+  const [currentPage, setCurrentPage] = useState<'home' | 'menu'>('home'); // State untuk pindah halaman
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
-  // State Keranjang
+  // State Keranjang & Produk
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null); // Untuk Popup Detail Produk
+  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false); // Untuk Popup Form Checkout
+  
+  // State Form Customer
+  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
+    name: '',
+    email: '',
+    address: ''
+  });
 
-  // Data Produk (Agar mudah dikelola)
-  const heroImage = "/hero-bg.png";
+  // Data Produk Lengkap
   const products: Product[] = [
     {
       id: 'kelepon',
       name: 'Kelepon Kecerit',
       price: 15000,
-      image: '/kelepon.png'
+      image: '/kelepon.png',
+      category: 'Makanan',
+      description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair. Sensasi "kecerit" (meletus) saat digigit memberikan pengalaman rasa manis yang unik, dipadukan dengan taburan kelapa parut gurih.'
     },
     {
       id: 'es-poteng',
       name: 'Es Poteng',
       price: 12000,
-      image: '/es-poteng.png'
+      image: '/es-poteng.png',
+      category: 'Minuman',
+      description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) yang difermentasi dengan ragi tradisional, disajikan dengan es serut dan sirup manis. Sangat cocok dinikmati saat cuaca panas untuk melepas dahaga.'
+    },
+    // Contoh produk tambahan agar halaman menu terlihat penuh
+    {
+      id: 'paket-hemat',
+      name: 'Paket Beranda',
+      price: 25000,
+      image: '/hero-bg.png', // Placeholder image
+      category: 'Paket',
+      description: 'Paket hemat berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris kami dengan harga lebih terjangkau.'
     }
   ];
 
-  // Nomor WA Admin
-  const waNumber = "6281807852840";
+  // Email Admin Toko (Ganti dengan email Anda)
+  const adminEmail = "admin@kulinerntb.id"; 
 
-  // --- FUNGSI KERANJANG ---
+  // --- LOGIKA PROGRAM ---
 
-  // Tambah ke Keranjang
-  const addToCart = (product: Product) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        // Jika produk sudah ada, tambah jumlahnya
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        // Jika produk belum ada, tambahkan baru
-        return [...prevCart, { ...product, quantity: 1 }];
-      }
-    });
-    // Buka keranjang otomatis saat menambah item (opsional, biar user tau)
-    setIsCartOpen(true);
-  };
+  // Handle Scroll Effect
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      setScrolled(currentScrollY > 50);
+      setShowBackToTop(currentScrollY > 300);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
-  // Kurangi/Hapus Item
-  const removeFromCart = (id: string) => {
-    setCart((prevCart) => 
-      prevCart.reduce((acc, item) => {
-        if (item.id === id) {
-          if (item.quantity > 1) {
-            acc.push({ ...item, quantity: item.quantity - 1 });
-          }
-          // Jika quantity 1 dan dikurangi, item hilang (tidak di-push ke array baru)
-        } else {
-          acc.push(item);
-        }
-        return acc;
-      }, [] as CartItem[])
-    );
-  };
-
-  // Hitung Total Harga
-  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-
-  // Checkout via WhatsApp
-  const handleCheckout = () => {
-    if (cart.length === 0) return;
-
-    let message = "Halo, saya ingin memesan menu berikut:\n\n";
-    cart.forEach((item, index) => {
-      message += `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
-    });
-    message += `\n*Total: Rp ${totalPrice.toLocaleString('id-ID')}*`;
-    message += "\n\nMohon diproses ya!";
-
-    window.open(`https://wa.me/${waNumber}?text=${encodeURIComponent(message)}`, '_blank');
-  };
-
-  // --- END FUNGSI KERANJANG ---
-
-  // State Theme
+  // Theme Logic
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';
@@ -119,27 +106,79 @@ function App() {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollY = window.scrollY;
-      setScrolled(currentScrollY > 50);
-      setShowBackToTop(currentScrollY > 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSection = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-      setIsMenuOpen(false);
-    }
-  };
-
-  const scrollToTop = () => {
+  // Navigasi
+  const navigateTo = (page: 'home' | 'menu') => {
+    setCurrentPage(page);
     window.scrollTo({ top: 0, behavior: 'smooth' });
+    setIsMenuOpen(false);
   };
+
+  // Cart Functions
+  const addToCart = (product: Product) => {
+    setCart((prevCart) => {
+      const existingItem = prevCart.find((item) => item.id === product.id);
+      if (existingItem) {
+        return prevCart.map((item) =>
+          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
+        );
+      } else {
+        return [...prevCart, { ...product, quantity: 1 }];
+      }
+    });
+    setIsCartOpen(true);
+    // Tutup popup detail jika sedang terbuka
+    setSelectedProduct(null);
+  };
+
+  const removeFromCart = (id: string) => {
+    setCart((prevCart) => 
+      prevCart.reduce((acc, item) => {
+        if (item.id === id) {
+          if (item.quantity > 1) {
+            acc.push({ ...item, quantity: item.quantity - 1 });
+          }
+        } else {
+          acc.push(item);
+        }
+        return acc;
+      }, [] as CartItem[])
+    );
+  };
+
+  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
+  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+
+  // Proses Order ke Email
+  const handleSubmitOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (cart.length === 0) return;
+
+    const subject = `Pesanan Baru dari ${customerInfo.name}`;
+    let body = `Halo Admin Beranda Kuliner NTB,\n\n`;
+    body += `Saya ingin memesan produk berikut:\n\n`;
+    
+    cart.forEach((item, index) => {
+      body += `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
+    });
+    
+    body += `\n-----------------------------------\n`;
+    body += `TOTAL HARGA: Rp ${totalPrice.toLocaleString('id-ID')}\n`;
+    body += `-----------------------------------\n\n`;
+    body += `Data Pemesan:\n`;
+    body += `Nama: ${customerInfo.name}\n`;
+    body += `Email: ${customerInfo.email}\n`;
+    body += `Alamat Pengiriman: ${customerInfo.address}\n\n`;
+    body += `Mohon segera diproses. Terima kasih!`;
+
+    // Membuka email client pengguna
+    window.location.href = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    
+    // Reset state setelah order (Opsional)
+    setIsCheckoutOpen(false);
+    setIsCartOpen(false);
+  };
+
+  // --- KOMPONEN UI ---
 
   const SectionDivider = () => (
     <div className="w-full flex justify-center items-center py-16">
@@ -150,12 +189,13 @@ function App() {
   return (
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-500 relative">
       
-      {/* Global Background Pattern */}
+      {/* Background Effects */}
       <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-10 bg-heritage-pattern z-0 mix-blend-overlay"></div>
-      
+      <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 bg-gradient-to-b from-transparent via-black/20 to-black/60 z-0"></div>
+
       <div className="relative z-10 flex min-h-screen w-full flex-col overflow-x-hidden">
         
-        {/* --- HEADER --- */}
+        {/* --- HEADER / NAVBAR --- */}
         <header 
           className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-500 ${
             scrolled 
@@ -163,10 +203,10 @@ function App() {
               : 'bg-transparent py-5 border-b border-transparent'
           }`}
         >
-          <div className="flex items-center gap-3 cursor-pointer group" onClick={scrollToTop}>
+          <div className="flex items-center gap-3 cursor-pointer group" onClick={() => navigateTo('home')}>
             <img 
               src="/logo-fiverr.png" 
-              alt="Fiverr Culinary Logo" 
+              alt="Logo" 
               className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300"
             />
             <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
@@ -174,31 +214,27 @@ function App() {
             </h2>
           </div>
           
+          {/* Desktop Menu */}
           <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
             <nav className="flex items-center gap-8">
-              {['Beranda', 'Menu', 'Tentang Kami', 'Kontak'].map((item, idx) => {
-                 const target = item === 'Beranda' ? 'root' : item === 'Tentang Kami' ? 'about' : item === 'Kontak' ? 'contact' : 'menu';
-                 const action = item === 'Beranda' ? scrollToTop : () => scrollToSection(target);
-                 return (
-                   <button key={idx} onClick={action} className="text-forest-deep dark:text-gray-300 text-sm font-bold hover:text-primary dark:hover:text-gold-aged transition-colors tracking-wide">
-                     {item}
-                   </button>
-                 )
-              })}
+              <button onClick={() => navigateTo('home')} className={`text-sm font-bold transition-colors tracking-wide ${currentPage === 'home' ? 'text-primary' : 'text-forest-deep dark:text-gray-300 hover:text-primary'}`}>
+                Beranda
+              </button>
+              <button onClick={() => navigateTo('menu')} className={`text-sm font-bold transition-colors tracking-wide ${currentPage === 'menu' ? 'text-primary' : 'text-forest-deep dark:text-gray-300 hover:text-primary'}`}>
+                Menu
+              </button>
+              {/* Tombol scroll section hanya aktif di home, jika di menu akan kembali ke home dulu */}
+              <button onClick={() => currentPage === 'home' ? document.getElementById('about')?.scrollIntoView({behavior:'smooth'}) : navigateTo('home')} className="text-forest-deep dark:text-gray-300 text-sm font-bold hover:text-primary dark:hover:text-gold-aged transition-colors tracking-wide">
+                Tentang Kami
+              </button>
             </nav>
 
-            <button 
-              onClick={toggleTheme}
-              className="p-2 rounded-full bg-black/5 dark:bg-white/5 text-forest-deep dark:text-gold-aged border border-transparent dark:border-gold-aged/30 hover:bg-primary hover:text-white transition-all"
-            >
-              <span className="material-symbols-outlined text-xl align-middle">
-                {theme === 'dark' ? 'light_mode' : 'dark_mode'}
-              </span>
+            <button onClick={toggleTheme} className="p-2 rounded-full bg-black/5 dark:bg-white/5 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all">
+              <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
             </button>
 
-            {/* TOMBOL KERANJANG (CART) DI NAVBAR */}
             <button 
-              onClick={() => setIsCartOpen(!isCartOpen)}
+              onClick={() => setIsCartOpen(true)}
               className="relative p-2 rounded-full bg-primary text-white hover:bg-gold-aged transition-colors shadow-lg shadow-primary/30"
             >
               <span className="material-symbols-outlined text-xl align-middle">shopping_cart</span>
@@ -210,14 +246,11 @@ function App() {
             </button>
           </div>
 
+          {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center gap-4">
-            <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative p-2 text-forest-deep dark:text-gold-aged">
+            <button onClick={() => setIsCartOpen(true)} className="relative p-2 text-forest-deep dark:text-gold-aged">
                <span className="material-symbols-outlined text-2xl">shopping_cart</span>
-               {totalItems > 0 && (
-                <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">
-                  {totalItems}
-                </span>
-              )}
+               {totalItems > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">{totalItems}</span>}
             </button>
             <button className="p-2 text-forest-deep dark:text-text-light" onClick={() => setIsMenuOpen(!isMenuOpen)}>
               <span className="material-symbols-outlined text-3xl">{isMenuOpen ? 'close' : 'menu'}</span>
@@ -225,51 +258,248 @@ function App() {
           </div>
         </header>
 
-        {/* --- MODAL KERANJANG (CART DRAWER) --- */}
-        {isCartOpen && (
+        {/* --- MOBILE NAV DROPDOWN --- */}
+        {isMenuOpen && (
+          <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/98 dark:bg-[#052e21]/98 backdrop-blur-xl pt-24 px-6 animate-fade-in-up">
+            <nav className="flex flex-col gap-6 text-center">
+              <button onClick={() => navigateTo('home')} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Beranda</button>
+              <button onClick={() => navigateTo('menu')} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Menu</button>
+              <button onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Tutup</button>
+            </nav>
+          </div>
+        )}
+
+        {/* =========================================
+            HALAMAN BERANDA (HOME CONTENT)
+           ========================================= */}
+        {currentPage === 'home' && (
           <>
-            {/* Backdrop Gelap */}
-            <div 
-              className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm transition-opacity"
-              onClick={() => setIsCartOpen(false)}
-            ></div>
-            
-            {/* Panel Keranjang */}
-            <div className="fixed top-0 right-0 h-full w-[320px] sm:w-[400px] bg-cream-parchment dark:bg-forest-deep shadow-2xl z-[70] p-6 flex flex-col transition-transform animate-fade-in-up border-l border-gold-aged/20">
-              <div className="flex justify-between items-center mb-6 border-b border-gold-aged/20 pb-4">
-                <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Keranjang Anda</h3>
-                <button onClick={() => setIsCartOpen(false)} className="text-secondary hover:text-red-500 transition-colors">
-                  <span className="material-symbols-outlined text-2xl">close</span>
-                </button>
+            {/* HERO SECTION */}
+            <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
+              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
+                <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-100 h-full"></div>
+                <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
               </div>
 
-              {/* List Item */}
+              <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
+                <span className="rounded-full bg-white/10 backdrop-blur-md px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] text-gold-aged border border-gold-aged/50 mb-6 inline-block shadow-xl">
+                  Kualitas Rasa Bumi Gora
+                </span>
+                <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
+                  Cita Rasa Asli Nusantara <br/>
+                  <span className="text-primary italic">dari Nusa Tenggara Barat</span>
+                </h1>
+                <p className="text-gray-100 text-lg sm:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-md">
+                  Nikmati kelezatan tradisional Kelepon Kecerit dan segarnya Es Poteng, persembahan istimewa dari kelompok PKKWU.
+                </p>
+                <div className="flex flex-col sm:flex-row gap-5 justify-center">
+                  <button onClick={() => navigateTo('menu')} className="h-14 min-w-[180px] rounded-full bg-primary px-8 text-white text-lg font-display font-bold shadow-xl shadow-primary/40 transition-all hover:scale-105 hover:bg-gold-aged">
+                    Lihat Menu
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* FEATURED MENU PREVIEW */}
+            <section className="px-4 lg:px-20 py-20 relative">
+              <div className="container mx-auto max-w-[1200px] text-center">
+                <h2 className="text-forest-deep dark:text-gold-aged text-4xl font-display font-bold mb-10">Menu Favorit</h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                  {products.slice(0, 2).map((product) => (
+                    <div key={product.id} onClick={() => setSelectedProduct(product)} className="group cursor-pointer relative overflow-hidden rounded-2xl shadow-xl aspect-video md:aspect-[4/3] lg:aspect-[16/9]">
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent flex flex-col justify-end p-6 text-left">
+                        <h3 className="text-white text-2xl font-display font-bold">{product.name}</h3>
+                        <p className="text-primary font-bold">Rp {product.price.toLocaleString('id-ID')}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-12">
+                  <button onClick={() => navigateTo('menu')} className="text-forest-deep dark:text-text-light underline font-bold hover:text-primary">Lihat Semua Menu &rarr;</button>
+                </div>
+              </div>
+            </section>
+
+            <SectionDivider />
+
+            {/* ABOUT SECTION */}
+            <section className="px-4 lg:px-20 py-24 bg-gold-aged/5 dark:bg-black/20 backdrop-blur-sm" id="about">
+              <div className="container mx-auto max-w-[900px]">
+                <div className="bg-cream-parchment dark:bg-[#052e21] border border-gold-aged/20 rounded-[3rem] p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
+                  <div className="relative z-10">
+                    <h2 className="text-3xl sm:text-5xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 leading-tight">
+                      Tentang Kami
+                    </h2>
+                    <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-12 font-body">
+                      Kami berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Beranda Kuliner NTB</span>, kami memperkenalkan kekayaan rasa Bumi Gora kepada dunia.
+                    </p>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-8 border-t border-gold-aged/20 pt-8">
+                      {[
+                        { icon: 'agriculture', label: 'Bahan Lokal' },
+                        { icon: 'recycling', label: 'Ramah Lingkungan' },
+                        { icon: 'package_2', label: 'Eco Packaging' },
+                        { icon: 'history_edu', label: 'Resep Warisan' },
+                      ].map((item, idx) => (
+                        <div key={idx} className="flex flex-col items-center gap-2">
+                          <span className="material-symbols-outlined text-3xl text-primary">{item.icon}</span>
+                          <div className="text-xs font-bold text-forest-deep dark:text-gray-300 uppercase tracking-widest mt-1">{item.label}</div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </>
+        )}
+
+        {/* =========================================
+            HALAMAN MENU (MENU PAGE)
+           ========================================= */}
+        {currentPage === 'menu' && (
+          <section className="px-4 lg:px-20 py-24 min-h-screen relative pt-32">
+            <div className="container mx-auto max-w-[1200px]">
+              <div className="text-center mb-16 animate-fade-in-up">
+                <h2 className="text-forest-deep dark:text-gold-aged text-5xl font-display font-extrabold mb-4">Daftar Menu</h2>
+                <p className="text-secondary/80 dark:text-gray-400">Pilih hidangan favoritmu dan rasakan kenikmatannya.</p>
+              </div>
+
+              {/* Product Grid */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                {products.map((product) => (
+                  <div key={product.id} className="bg-white dark:bg-[#0a2e25] rounded-2xl shadow-lg overflow-hidden border border-gold-aged/10 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 group">
+                    {/* Image Container with Overlay on Hover */}
+                    <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => setSelectedProduct(product)}>
+                      <img src={product.image} alt={product.name} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110" />
+                      <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <span className="text-white font-bold border border-white px-4 py-2 rounded-full backdrop-blur-sm">Lihat Detail</span>
+                      </div>
+                    </div>
+                    
+                    {/* Card Content */}
+                    <div className="p-6">
+                      <div className="flex justify-between items-start mb-2">
+                        <h3 className="text-xl font-display font-bold text-forest-deep dark:text-text-light">{product.name}</h3>
+                        <span className="bg-primary/10 text-primary text-xs font-bold px-2 py-1 rounded">{product.category}</span>
+                      </div>
+                      <p className="text-sm text-secondary/70 dark:text-gray-400 mb-4 line-clamp-2">{product.description}</p>
+                      <div className="flex justify-between items-center">
+                        <span className="text-lg font-bold text-primary">Rp {product.price.toLocaleString('id-ID')}</span>
+                        <button 
+                          onClick={() => addToCart(product)}
+                          className="bg-primary text-white p-2 rounded-full hover:bg-gold-aged transition-colors shadow-md"
+                          title="Tambah ke Keranjang"
+                        >
+                          <span className="material-symbols-outlined text-xl">add_shopping_cart</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* --- FOOTER (Global) --- */}
+        <footer className="bg-forest-deep dark:bg-[#021812] text-white py-16 px-6 lg:px-20 border-t-4 border-primary">
+          <div className="container mx-auto max-w-[1200px] text-center md:text-left">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+              <div>
+                <h3 className="text-xl font-display font-bold text-gold-aged mb-4">Beranda Kuliner NTB</h3>
+                <p className="text-gray-400 text-sm">Menghadirkan kehangatan tradisi Nusa Tenggara Barat ke meja makan Anda.</p>
+              </div>
+              <div>
+                <h4 className="text-gold-aged font-bold mb-4">Navigasi</h4>
+                <ul className="space-y-2 text-sm text-gray-300">
+                  <li><button onClick={() => navigateTo('home')} className="hover:text-primary">Beranda</button></li>
+                  <li><button onClick={() => navigateTo('menu')} className="hover:text-primary">Menu</button></li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-gold-aged font-bold mb-4">Kontak</h4>
+                <p className="text-sm text-gray-300 mb-2">Email: {adminEmail}</p>
+                <p className="text-sm text-gray-300">Telp: +62 818-0785-2840</p>
+              </div>
+            </div>
+            <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">
+              © 2025 Kelompok PKKWU. All rights reserved.
+            </div>
+          </div>
+        </footer>
+
+        {/* =========================================
+            MODALS & POPUPS
+           ========================================= */}
+
+        {/* 1. PRODUCT DETAIL POPUP */}
+        {selectedProduct && (
+          <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" onClick={() => setSelectedProduct(null)}></div>
+            <div className="relative bg-cream-parchment dark:bg-forest-deep rounded-3xl overflow-hidden shadow-2xl max-w-4xl w-full flex flex-col md:flex-row animate-fade-in-up max-h-[90vh]">
+              <button onClick={() => setSelectedProduct(null)} className="absolute top-4 right-4 z-10 bg-black/20 hover:bg-black/40 text-white p-2 rounded-full transition-colors">
+                <span className="material-symbols-outlined">close</span>
+              </button>
+              {/* Image Side */}
+              <div className="w-full md:w-1/2 h-64 md:h-auto bg-gray-200">
+                <img src={selectedProduct.image} alt={selectedProduct.name} className="w-full h-full object-cover" />
+              </div>
+              {/* Content Side */}
+              <div className="w-full md:w-1/2 p-8 flex flex-col overflow-y-auto">
+                <span className="text-primary font-bold tracking-widest text-xs uppercase mb-2">{selectedProduct.category}</span>
+                <h3 className="text-3xl font-display font-bold text-forest-deep dark:text-gold-aged mb-4">{selectedProduct.name}</h3>
+                <p className="text-secondary dark:text-gray-300 leading-relaxed mb-6 flex-1">
+                  {selectedProduct.description}
+                </p>
+                <div className="border-t border-gold-aged/20 pt-6 mt-auto">
+                  <div className="flex items-center justify-between mb-6">
+                    <span className="text-gray-500 dark:text-gray-400 text-sm">Harga</span>
+                    <span className="text-3xl font-bold text-primary">Rp {selectedProduct.price.toLocaleString('id-ID')}</span>
+                  </div>
+                  <button 
+                    onClick={() => addToCart(selectedProduct)}
+                    className="w-full py-4 rounded-xl bg-primary text-white font-bold text-lg shadow-xl hover:bg-gold-aged transition-all flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined">add_shopping_cart</span>
+                    Tambah ke Keranjang
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* 2. CART DRAWER (KERANJANG) */}
+        {isCartOpen && (
+          <>
+            <div className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm transition-opacity" onClick={() => setIsCartOpen(false)}></div>
+            <div className="fixed top-0 right-0 h-full w-[320px] sm:w-[400px] bg-cream-parchment dark:bg-forest-deep shadow-2xl z-[70] p-6 flex flex-col transition-transform animate-fade-in-up border-l border-gold-aged/20">
+              <div className="flex justify-between items-center mb-6 border-b border-gold-aged/20 pb-4">
+                <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Keranjang</h3>
+                <button onClick={() => setIsCartOpen(false)} className="text-secondary hover:text-red-500"><span className="material-symbols-outlined text-2xl">close</span></button>
+              </div>
               <div className="flex-1 overflow-y-auto space-y-4">
                 {cart.length === 0 ? (
-                  <div className="text-center text-secondary/60 dark:text-gray-400 mt-10">
-                    <span className="material-symbols-outlined text-6xl mb-2">shopping_basket</span>
-                    <p>Keranjang masih kosong nih.</p>
-                    <p className="text-sm">Yuk pesan sesuatu!</p>
-                  </div>
+                  <div className="text-center text-gray-400 mt-10">Keranjang kosong.</div>
                 ) : (
                   cart.map((item) => (
-                    <div key={item.id} className="flex gap-4 items-center bg-white/50 dark:bg-black/20 p-3 rounded-lg border border-gold-aged/10">
+                    <div key={item.id} className="flex gap-4 items-center bg-white/50 dark:bg-black/20 p-3 rounded-lg">
                       <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
                       <div className="flex-1">
                         <h4 className="font-bold text-forest-deep dark:text-text-light text-sm">{item.name}</h4>
                         <p className="text-primary text-sm font-bold">Rp {item.price.toLocaleString('id-ID')}</p>
                       </div>
-                      <div className="flex items-center gap-2 bg-white dark:bg-forest-deep rounded-full border border-gold-aged/30 px-2 py-1">
-                        <button onClick={() => removeFromCart(item.id)} className="text-xs font-bold w-5 h-5 flex items-center justify-center hover:text-red-500">-</button>
-                        <span className="text-xs font-bold min-w-[10px] text-center">{item.quantity}</span>
-                        <button onClick={() => addToCart(item)} className="text-xs font-bold w-5 h-5 flex items-center justify-center hover:text-primary">+</button>
+                      <div className="flex items-center gap-2 bg-white dark:bg-forest-deep rounded-full px-2 py-1 border border-gold-aged/30">
+                        <button onClick={() => removeFromCart(item.id)} className="w-5 hover:text-red-500">-</button>
+                        <span className="text-xs font-bold">{item.quantity}</span>
+                        <button onClick={() => addToCart(item)} className="w-5 hover:text-primary">+</button>
                       </div>
                     </div>
                   ))
                 )}
               </div>
-
-              {/* Footer Cart */}
               {cart.length > 0 && (
                 <div className="border-t border-gold-aged/20 pt-4 mt-4">
                   <div className="flex justify-between items-center mb-4 text-forest-deep dark:text-gold-aged font-bold text-lg">
@@ -277,11 +507,10 @@ function App() {
                     <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
                   </div>
                   <button 
-                    onClick={handleCheckout}
-                    className="w-full py-3 rounded-lg bg-primary text-white font-bold shadow-lg hover:bg-gold-aged hover:scale-[1.02] transition-all flex items-center justify-center gap-2"
+                    onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}
+                    className="w-full py-3 rounded-lg bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all"
                   >
-                    <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                    Checkout WhatsApp
+                    Checkout Sekarang
                   </button>
                 </div>
               )}
@@ -289,290 +518,73 @@ function App() {
           </>
         )}
 
-        {isMenuOpen && (
-          <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/98 dark:bg-[#052e21]/98 backdrop-blur-xl pt-24 px-6 animate-fade-in-up">
-            <nav className="flex flex-col gap-6 text-center">
-              <button onClick={() => {scrollToTop(); setIsMenuOpen(false)}} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Beranda</button>
-              <button onClick={() => {scrollToSection('menu'); setIsMenuOpen(false)}} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Menu</button>
-              <button onClick={() => {scrollToSection('about'); setIsMenuOpen(false)}} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Tentang Kami</button>
-              <button onClick={() => {scrollToSection('contact'); setIsMenuOpen(false)}} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Kontak</button>
-            </nav>
+        {/* 3. CHECKOUT FORM POPUP (Baru) */}
+        {isCheckoutOpen && (
+          <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsCheckoutOpen(false)}></div>
+            <div className="relative bg-cream-parchment dark:bg-[#0a2e25] p-8 rounded-3xl shadow-2xl max-w-md w-full animate-fade-in-up border border-gold-aged/20">
+              <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 text-center">Data Pemesan</h3>
+              
+              <form onSubmit={handleSubmitOrder} className="space-y-4">
+                <div>
+                  <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Nama Lengkap</label>
+                  <input 
+                    required 
+                    type="text" 
+                    value={customerInfo.name}
+                    onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})}
+                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 focus:border-primary focus:ring-1 focus:ring-primary outline-none dark:text-white"
+                    placeholder="Contoh: Budi Santoso"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Email</label>
+                  <input 
+                    required 
+                    type="email" 
+                    value={customerInfo.email}
+                    onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})}
+                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 focus:border-primary focus:ring-1 focus:ring-primary outline-none dark:text-white"
+                    placeholder="email@anda.com"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Alamat Lengkap</label>
+                  <textarea 
+                    required 
+                    rows={3}
+                    value={customerInfo.address}
+                    onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})}
+                    className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 focus:border-primary focus:ring-1 focus:ring-primary outline-none dark:text-white resize-none"
+                    placeholder="Jl. Raya Mataram No. 123..."
+                  ></textarea>
+                </div>
+
+                <div className="pt-4 flex gap-3">
+                  <button 
+                    type="button" 
+                    onClick={() => setIsCheckoutOpen(false)}
+                    className="flex-1 py-3 rounded-xl border border-gold-aged/50 text-forest-deep dark:text-gold-aged font-bold hover:bg-black/5 transition-colors"
+                  >
+                    Batal
+                  </button>
+                  <button 
+                    type="submit" 
+                    className="flex-1 py-3 rounded-xl bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all flex items-center justify-center gap-2"
+                  >
+                    <span className="material-symbols-outlined text-sm">send</span>
+                    Kirim Order
+                  </button>
+                </div>
+                <p className="text-center text-xs text-gray-500 mt-4">
+                  *Order akan dikirim ke email admin untuk diproses.
+                </p>
+              </form>
+            </div>
           </div>
         )}
 
-        {/* --- HERO SECTION --- */}
-        <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("${heroImage}")` }}>
-            <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-100 h-full"></div>
-            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
-          </div>
-
-          <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
-            <span className="rounded-full bg-white/10 backdrop-blur-md px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] text-gold-aged border border-gold-aged/50 mb-6 inline-block shadow-xl">
-              Kualitas Rasa Bumi Gora
-            </span>
-            <h1 className="text-white text-4xl sm:text-5xl lg:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
-              Cita Rasa Asli Nusantara <br/>
-              <span className="text-primary italic">dari Nusa Tenggara Barat</span>
-            </h1>
-            <p className="text-gray-100 text-lg sm:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-md">
-              Nikmati kelezatan tradisional Kelepon Kecerit dan segarnya Es Poteng, persembahan istimewa dari kelompok PKKWU dengan sentuhan khas NTB yang otentik.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-5 justify-center">
-              <button onClick={() => scrollToSection('menu')} className="h-14 min-w-[180px] rounded-full bg-primary px-8 text-white text-lg font-display font-bold shadow-xl shadow-primary/40 transition-all hover:scale-105 hover:bg-gold-aged">
-                Jelajahi Rasa
-              </button>
-              <button onClick={() => scrollToSection('about')} className="h-14 min-w-[180px] rounded-full bg-white/10 border-2 border-white/30 backdrop-blur-sm px-8 text-white text-lg font-display font-bold transition-all hover:bg-white/20 hover:border-white">
-                Tentang Kami
-              </button>
-            </div>
-          </div>
-        </section>
-
-        {/* --- MENU SECTION --- */}
-        <section className="px-4 lg:px-20 py-16 relative transition-colors duration-500" id="menu">
-          <div className="container mx-auto max-w-[1200px]">
-            
-            <div className="text-center mb-24 animate-fade-in-up pt-10">
-               <div className="flex items-center justify-center gap-6">
-                  <div className="h-[2px] w-12 sm:w-24 bg-primary"></div>
-                  <h2 className="text-primary font-display font-bold tracking-[0.2em] uppercase text-sm sm:text-base">
-                    Menu Spesial
-                  </h2>
-                  <div className="h-[2px] w-12 sm:w-24 bg-primary"></div>
-               </div>
-               <h2 className="text-forest-deep dark:text-white text-4xl sm:text-5xl font-display font-extrabold mt-4 mb-4">
-                Menu Andalan Kami
-              </h2>
-              <p className="text-secondary/80 dark:text-gray-400 max-w-lg mx-auto font-body">
-                Rasakan perpaduan sempurna antara resep leluhur dan bahan-bahan lokal pilihan.
-              </p>
-            </div>
-
-            {/* ITEM 1: KELEPON KECERIT */}
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mb-32 group">
-              <div className="lg:w-1/2 order-2 lg:order-1">
-                <div className="flex items-center gap-2 mb-4">
-                  <span className="bg-primary/20 text-primary p-2 rounded-full">
-                    <span className="material-symbols-outlined text-lg">star</span>
-                  </span>
-                  <span className="text-primary font-bold text-sm uppercase tracking-wider">Warisan Terbaik</span>
-                </div>
-                <h3 className="text-4xl lg:text-5xl font-display font-bold text-forest-deep dark:text-white mb-6">
-                  {products[0].name}
-                </h3>
-                <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-6 font-body">
-                  Sensasi manis gula aren cair yang meledak <span className="text-primary font-bold italic">(kecerit)</span> di mulut, berpadu dengan gurihnya kelapa parut.
-                </p>
-                <div className="text-3xl font-display font-bold text-primary mb-8">
-                  Rp {products[0].price.toLocaleString('id-ID')} <span className="text-base text-secondary/60 dark:text-gray-500 font-body font-normal">/ porsi</span>
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-                  {[
-                    {icon: 'water_drop', title: 'Gula Aren Asli', desc: 'Lumer sempurna'},
-                    {icon: 'eco', title: 'Tanpa Pengawet', desc: 'Segar alami'},
-                    {icon: 'menu_book', title: 'Resep Warisan', desc: 'Asli Sasak'}
-                  ].map((item, idx) => (
-                    <div key={idx} className="bg-white/50 dark:bg-emerald-900/30 p-4 rounded-xl border border-primary/10 shadow-sm hover:shadow-md transition-all">
-                      <span className="material-symbols-outlined text-primary mb-2">{item.icon}</span>
-                      <h4 className="font-bold text-forest-deep dark:text-white text-sm mb-1 font-display">{item.title}</h4>
-                      <p className="text-xs text-secondary/70 dark:text-gray-400 font-body">{item.desc}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* ADD TO CART BUTTON 1 */}
-                <button 
-                  onClick={() => addToCart(products[0])}
-                  className="h-12 px-8 inline-flex items-center justify-center rounded-lg bg-primary text-white font-bold shadow-lg shadow-primary/30 hover:bg-gold-aged hover:translate-y-[-2px] transition-all gap-2"
-                >
-                  <span className="material-symbols-outlined">add_shopping_cart</span>
-                  Tambah ke Keranjang
-                </button>
-              </div>
-
-              <div className="lg:w-1/2 order-1 lg:order-2 relative">
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 ring-1 ring-white/10">
-                  <img src={products[0].image} alt={products[0].name} className="w-full h-[400px] sm:h-[500px] object-cover image-sensory-filter hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
-              </div>
-            </div>
-
-            <SectionDivider />
-
-            {/* ITEM 2: ES POTENG */}
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20 mt-16">
-              <div className="lg:w-1/2 relative">
-                <div className="relative rounded-3xl overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 ring-1 ring-white/10">
-                  <img src={products[1].image} alt={products[1].name} className="w-full h-[400px] sm:h-[500px] object-cover image-sensory-filter hover:scale-110 transition-transform duration-700" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
-                </div>
-              </div>
-
-              <div className="lg:w-1/2">
-                <h3 className="text-4xl lg:text-5xl font-display font-bold text-forest-deep dark:text-white mb-6">
-                  {products[1].name}
-                </h3>
-                <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-6 font-body">
-                  Kesegaran tape singkong fermentasi yang manis dan lembut, disajikan dingin untuk melepas dahaga. Hidangan penutup legendaris yang memanjakan lidah.
-                </p>
-                <div className="text-3xl font-display font-bold text-primary mb-8">
-                  Rp {products[1].price.toLocaleString('id-ID')} <span className="text-base text-secondary/60 dark:text-gray-500 font-body font-normal">/ mangkuk</span>
-                </div>
-
-                <div className="space-y-4 mb-8">
-                  {[
-                    {icon: 'thumb_up', title: 'Tape Singkong Pilihan', desc: 'Singkong berkualitas tinggi yang difermentasi dengan sempurna', color: 'bg-blue-100 text-blue-600', darkColor: 'dark:text-blue-300 dark:bg-blue-900/40'},
-                    {icon: 'ac_unit', title: 'Segar & Alami', desc: 'Tanpa pemanis buatan, manis murni dari fermentasi', color: 'bg-teal-100 text-teal-600', darkColor: 'dark:text-teal-300 dark:bg-teal-900/40'},
-                    {icon: 'history_edu', title: 'Cita Rasa Khas', desc: 'Hidangan penutup legendaris khas masyarakat Sasak', color: 'bg-orange-100 text-orange-600', darkColor: 'dark:text-orange-300 dark:bg-orange-900/40'}
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex items-start gap-4 p-4 rounded-xl bg-white/50 dark:bg-emerald-900/30 border border-primary/10 hover:border-primary/40 transition-colors">
-                      <div className={`p-2 rounded-lg ${item.color} ${item.darkColor}`}>
-                        <span className="material-symbols-outlined">{item.icon}</span>
-                      </div>
-                      <div>
-                        <h4 className="font-bold text-forest-deep dark:text-white font-display">{item.title}</h4>
-                        <p className="text-sm text-secondary/70 dark:text-gray-400 font-body">{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                {/* ADD TO CART BUTTON 2 */}
-                <button 
-                  onClick={() => addToCart(products[1])}
-                  className="h-12 px-8 inline-flex items-center justify-center rounded-lg border-2 border-primary text-primary font-bold hover:bg-primary hover:text-white transition-all shadow-lg shadow-primary/10 gap-2"
-                >
-                  <span className="material-symbols-outlined">add_shopping_cart</span>
-                  Tambah ke Keranjang
-                </button>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* --- ABOUT SECTION --- */}
-        <section className="px-4 lg:px-20 py-24 bg-gold-aged/5 dark:bg-black/20 backdrop-blur-sm" id="about">
-          <div className="container mx-auto max-w-[900px]">
-            <div className="bg-cream-parchment dark:bg-[#052e21] border border-gold-aged/20 rounded-[3rem] p-12 lg:p-16 text-center shadow-2xl relative overflow-hidden">
-              <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-64 bg-primary/20 rounded-full blur-3xl mix-blend-screen"></div>
-              
-              <div className="relative z-10">
-                <div className="size-20 bg-gold-aged/20 text-primary rounded-full flex items-center justify-center mx-auto mb-6 ring-4 ring-white/10">
-                  <span className="material-symbols-outlined text-4xl">groups</span>
-                </div>
-                <h2 className="text-3xl sm:text-5xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 leading-tight">
-                  Dibuat dengan Cinta oleh Kelompok Fiver
-                </h2>
-                <p className="text-lg text-secondary dark:text-gray-300 leading-relaxed mb-12 font-body">
-                  Kami berdedikasi untuk melestarikan kuliner tradisional Nusantara. Melalui <span className="font-bold text-primary">Produk kami</span>, hadir memperkenalkan kekayaan rasa Bumi Gora kepada dunia.
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 border-t border-gold-aged/20 pt-10">
-                  {[
-                    { 
-                      icon: 'agriculture', 
-                      title: 'Bahan Baku 100%', 
-                      desc: 'Organik dari petani lokal' 
-                    },
-                    { 
-                      icon: 'recycling', 
-                      title: 'Ramah Lingkungan', 
-                      desc: 'Proses produksi minim limbah' 
-                    },
-                    { 
-                      icon: 'package_2', 
-                      title: 'Eco Packaging', 
-                      desc: 'Kemasan aman & berkelanjutan' 
-                    },
-                    { 
-                      icon: 'history_edu', 
-                      title: 'Resep Warisan', 
-                      desc: 'Melestarikan cita rasa leluhur' 
-                    },
-                  ].map((item, idx) => (
-                    <div key={idx} className="flex flex-col items-center gap-3 p-4 hover:bg-white/5 rounded-xl transition-colors">
-                      <div className="p-3 rounded-full bg-primary/10 text-primary mb-2">
-                        <span className="material-symbols-outlined text-3xl">{item.icon}</span>
-                      </div>
-                      <h4 className="text-xl font-bold text-forest-deep dark:text-gold-aged font-display">{item.title}</h4>
-                      <p className="text-sm text-secondary/70 dark:text-gray-400 font-body max-w-[200px] leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* --- FOOTER --- */}
-        <footer className="bg-forest-deep dark:bg-[#021812] text-white py-16 px-6 lg:px-20 border-t-4 border-primary" id="contact">
-          <div className="container mx-auto max-w-[1200px]">
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
-              <div>
-                <div className="flex items-center gap-2 text-gold-aged mb-6">
-                  <span className="material-symbols-outlined text-3xl">restaurant</span>
-                  <h3 className="text-xl font-display font-bold leading-tight">Beranda Kuliner <br/>NTB</h3>
-                </div>
-                <p className="text-gray-400 text-sm leading-relaxed font-body">
-                  Menghadirkan kehangatan tradisi Nusa Tenggara Barat ke meja makan Anda.
-                </p>
-              </div>
-
-              <div>
-                <h4 className="text-gold-aged font-bold mb-6 font-display">Menu</h4>
-                <ul className="space-y-3 text-sm text-gray-300 font-body">
-                  <li><button onClick={() => scrollToSection('menu')} className="hover:text-primary transition-colors">Kelepon Kecerit</button></li>
-                  <li><button onClick={() => scrollToSection('menu')} className="hover:text-primary transition-colors">Es Poteng</button></li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-gold-aged font-bold mb-6 font-display">Kontak</h4>
-                <ul className="space-y-3 text-sm text-gray-300 font-body">
-                  <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-xs">call</span> 
-                    <a href={`https://wa.me/${waNumber}`} className="hover:text-primary">+62 818-0785-2840</a>
-                  </li>
-                  <li className="flex items-center gap-3">
-                    <span className="material-symbols-outlined text-xs">location_on</span> Jakarta
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="text-gold-aged font-bold mb-6 font-display">Ikuti Kami</h4>
-                <div className="flex gap-4">
-                  <a href="#" className="size-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
-                     <svg className="w-5 h-5 fill-current text-white" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
-                  </a>
-                  <a href="#" className="size-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
-                     <svg className="w-5 h-5 fill-current text-white" viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.791-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-                  </a>
-                  <a href={`https://wa.me/${waNumber}`} className="size-10 rounded-full bg-white/10 flex items-center justify-center hover:bg-primary transition-colors">
-                     <svg className="w-5 h-5 fill-current text-white" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
-                  </a>
-                </div>
-              </div>
-            </div>
-
-            <div className="mt-16 pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500 font-body">
-              <p>© 2025 Kelompok Fiver. All rights reserved.</p>
-              <div className="flex gap-6 mt-4 md:mt-0">
-                <a href="#" className="hover:text-white">Privacy Policy</a>
-                <a href="#" className="hover:text-white">Terms of Service</a>
-              </div>
-            </div>
-          </div>
-        </footer>
-
-        {/* --- BACK TO TOP --- */}
+        {/* --- BACK TO TOP BUTTON --- */}
         <button onClick={scrollToTop} className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-white shadow-xl transition-all duration-300 transform hover:bg-gold-aged hover:scale-110 ${showBackToTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`} title="Kembali ke Atas">
           <span className="material-symbols-outlined text-2xl">arrow_upward</span>
         </button>
