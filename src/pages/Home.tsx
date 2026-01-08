@@ -6,20 +6,35 @@ const Home = () => {
   return (
     <>
       {/* 1. HERO SECTION */}
-      <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
-          {/* Overlay Gelap Dikit biar Teks Terbaca */}
-          <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
+      {/* UPDATE: Tambahkan bg-forest-deep di sini sebagai layer paling dasar */}
+      <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-cream-parchment dark:bg-forest-deep">
+        
+        {/* Background Image Container */}
+        <div className="absolute inset-0 w-full h-full">
+          {/* Gambar */}
+          <div 
+            className="absolute inset-0 bg-cover bg-center" 
+            style={{ backgroundImage: `url("/hero-bg.png")` }}
+          ></div>
+
+          {/* Overlay Gelap (Supaya teks putih terbaca) */}
+          <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
           
-          {/* --- FOGGY EFFECT (DIPERHALUS UNTUK DARK MODE) --- */}
-          {/* Layer 1: Gradasi Full Screen (Memberikan atmosfer foggy) */}
-          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-90"></div>
+          {/* --- FOGGY EFFECT (UPDATED) --- */}
           
-          {/* Layer 2: Gradasi Bawah Extra Tinggi (Menghilangkan garis potong) */}
-          <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
+          {/* Layer 1: Gradasi Halus dari Bawah ke Atas (Full Screen) */}
+          {/* Menggunakan 'via' dengan opacity tinggi supaya warna solid naik lebih tinggi */}
+          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment via-cream-parchment/60 to-transparent dark:from-forest-deep dark:via-forest-deep/80 dark:to-transparent"></div>
+          
+          {/* Layer 2: Penutup Bawah (Blocking) */}
+          {/* Ini untuk memastikan bagian paling bawah 100% solid menyatu dengan section berikutnya */}
+          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment to-cream-parchment/0 dark:from-forest-deep dark:to-forest-deep/0"></div>
+          
+          {/* Layer 3: Vignette Halus (Opsional, mempercantik fokus tengah) */}
+          <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/20 pointer-events-none"></div>
         </div>
 
+        {/* Content */}
         <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
           <span className="rounded-full bg-white/10 backdrop-blur-md px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] text-gold-aged border border-gold-aged/50 mb-6 inline-block shadow-xl">
             Kelompok PKKWU
@@ -40,9 +55,9 @@ const Home = () => {
       </section>
 
       {/* 2. VISI MISI */}
-      <section className="px-4 lg:px-20 py-20 bg-cream-parchment dark:bg-forest-deep">
+      <section className="px-4 lg:px-20 py-20 bg-cream-parchment dark:bg-forest-deep relative z-20 -mt-1">
         <div className="container mx-auto max-w-[900px]">
-          <div className="bg-white/50 dark:bg-black/20 border border-gold-aged/20 rounded-[2rem] p-10 md:p-16 text-center shadow-lg relative">
+          <div className="bg-white/50 dark:bg-black/20 border border-gold-aged/20 rounded-[2rem] p-10 md:p-16 text-center shadow-lg relative backdrop-blur-sm">
             <span className="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Visi & Misi</span>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 leading-snug">
               Mengangkat Kearifan Lokal ke <br/> Panggung Modern
@@ -63,7 +78,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. FILOSOFI KELEPON (Gambar Miring Kanan, Tanpa Border) */}
+      {/* 3. FILOSOFI KELEPON */}
       <section className="py-20 px-6 lg:px-20 bg-cream-parchment dark:bg-forest-deep">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
@@ -90,7 +105,7 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Image Side - ANIMASI ROTATE/TILT, NO BORDER */}
+            {/* Image Side */}
             <div className="flex-1 order-1 md:order-2">
               <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
                 <img 
@@ -98,7 +113,6 @@ const Home = () => {
                   alt="Filosofi Kelepon" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* Gradient overlay tipis biar menyatu dengan tema */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
               </div>
             </div>
@@ -107,12 +121,12 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. SEJARAH ES POTENG (Gambar Miring Kiri, Tanpa Border) */}
+      {/* 4. SEJARAH ES POTENG */}
       <section className="py-20 px-6 lg:px-20 bg-gold-aged/5 dark:bg-black/10">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
             
-            {/* Image Side - ANIMASI ROTATE/TILT, NO BORDER */}
+            {/* Image Side */}
             <div className="flex-1">
                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
                 <img 
@@ -120,7 +134,6 @@ const Home = () => {
                   alt="Sejarah Es Poteng" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* Gradient overlay tipis */}
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
               </div>
             </div>
@@ -215,17 +228,17 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
-                name: 'Bramasta', 
-                role: 'Pelajar', 
+                name: 'Andi Pratama', 
+                role: 'Mahasiswa', 
                 text: 'Rasanya otentik banget! Mengingatkan saya pada kampung halaman di Lombok. Keleponnya pecah di mulut!' 
               },
               { 
-                name: 'Evi Susanti', 
+                name: 'Siti Aminah', 
                 role: 'Ibu Rumah Tangga', 
                 text: 'Es Poteng-nya segar, manisnya pas dan nggak bikin eneg. Anak-anak saya di rumah juga pada suka.' 
               },
               { 
-                name: 'Uda Tanboy', 
+                name: 'Budi Santoso', 
                 role: 'Food Vlogger', 
                 text: 'Salut sama anak muda yang melestarikan kuliner tradisional. Kemasannya juga modern dan higienis. Mantap!' 
               },
