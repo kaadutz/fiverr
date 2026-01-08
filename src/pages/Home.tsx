@@ -12,11 +12,11 @@ const Home = () => {
           {/* Overlay Gelap Dikit biar Teks Terbaca */}
           <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
           
-          {/* --- FOGGY EFFECT (DIPERTEBAL) --- */}
-          {/* Layer 1: Gradasi dari bawah ke atas full screen (tipis) */}
+          {/* --- FOGGY EFFECT (DIPERHALUS UNTUK DARK MODE) --- */}
+          {/* Layer 1: Gradasi Full Screen (Memberikan atmosfer foggy) */}
           <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-90"></div>
           
-          {/* Layer 2: Gradasi Solid di bawah (Tinggi 500px biar seamless banget) */}
+          {/* Layer 2: Gradasi Bawah Extra Tinggi (Menghilangkan garis potong) */}
           <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
 
@@ -215,17 +215,17 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
-                name: 'Andi Pratama', 
-                role: 'Mahasiswa', 
+                name: 'Bramasta', 
+                role: 'Pelajar', 
                 text: 'Rasanya otentik banget! Mengingatkan saya pada kampung halaman di Lombok. Keleponnya pecah di mulut!' 
               },
               { 
-                name: 'Siti Aminah', 
+                name: 'Evi Susanti', 
                 role: 'Ibu Rumah Tangga', 
                 text: 'Es Poteng-nya segar, manisnya pas dan nggak bikin eneg. Anak-anak saya di rumah juga pada suka.' 
               },
               { 
-                name: 'Budi Santoso', 
+                name: 'Uda Tanboy', 
                 role: 'Food Vlogger', 
                 text: 'Salut sama anak muda yang melestarikan kuliner tradisional. Kemasannya juga modern dan higienis. Mantap!' 
               },
