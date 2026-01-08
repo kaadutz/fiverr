@@ -5,17 +5,19 @@ const Home = () => {
 
   return (
     <>
-      {/* 1. HERO SECTION (Efek Foggy Persis dari Kode Anda) */}
+      {/* 1. HERO SECTION */}
       <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
-          <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
+          {/* Overlay Gelap Dikit biar Teks Terbaca */}
+          <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
           
-          {/* FOGGY GRADIENT (Sesuai Kode Anda) */}
-          {/* Gradient Fade yang lebih halus menyatu dengan background section bawah */}
-          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-100 h-full"></div>
-          {/* Extra Gradient di bawah banget biar seamless */}
-          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
+          {/* --- FOGGY EFFECT (DIPERTEBAL) --- */}
+          {/* Layer 1: Gradasi dari bawah ke atas full screen (tipis) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-90"></div>
+          
+          {/* Layer 2: Gradasi Solid di bawah (Tinggi 500px biar seamless banget) */}
+          <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
 
         <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
@@ -61,7 +63,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. FILOSOFI KELEPON (Gambar dengan Animasi Miring & Foggy) */}
+      {/* 3. FILOSOFI KELEPON (Gambar Miring Kanan, Tanpa Border) */}
       <section className="py-20 px-6 lg:px-20 bg-cream-parchment dark:bg-forest-deep">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
@@ -88,16 +90,16 @@ const Home = () => {
               </div>
             </div>
 
-            {/* Image Side - ANIMASI TILT & FOGGY OVERLAY */}
+            {/* Image Side - ANIMASI ROTATE/TILT, NO BORDER */}
             <div className="flex-1 order-1 md:order-2">
-              <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px]">
+              <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
                 <img 
                   src="/kelepon.png" 
                   alt="Filosofi Kelepon" 
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* Efek Foggy/Gradient Overlay Sesuai Code Anda */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
+                {/* Gradient overlay tipis biar menyatu dengan tema */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
               </div>
             </div>
 
@@ -105,21 +107,21 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. SEJARAH ES POTENG (Gambar dengan Animasi Miring & Foggy) */}
+      {/* 4. SEJARAH ES POTENG (Gambar Miring Kiri, Tanpa Border) */}
       <section className="py-20 px-6 lg:px-20 bg-gold-aged/5 dark:bg-black/10">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
             
-            {/* Image Side - ANIMASI TILT & FOGGY OVERLAY */}
+            {/* Image Side - ANIMASI ROTATE/TILT, NO BORDER */}
             <div className="flex-1">
-               <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px]">
+               <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
                 <img 
                   src="/es-poteng.png" 
                   alt="Sejarah Es Poteng" 
-                  className="w-full h-full object-cover hover:scale-110 transition-transform duration-700"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
-                {/* Efek Foggy/Gradient Overlay Sesuai Code Anda */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
+                {/* Gradient overlay tipis */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
               </div>
             </div>
 
