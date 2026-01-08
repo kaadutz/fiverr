@@ -6,32 +6,33 @@ const Home = () => {
   return (
     <>
       {/* 1. HERO SECTION */}
-      {/* UPDATE: Tambahkan bg-forest-deep di sini sebagai layer paling dasar */}
       <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-cream-parchment dark:bg-forest-deep">
         
         {/* Background Image Container */}
         <div className="absolute inset-0 w-full h-full">
-          {/* Gambar */}
           <div 
             className="absolute inset-0 bg-cover bg-center" 
             style={{ backgroundImage: `url("/hero-bg.png")` }}
           ></div>
 
-          {/* Overlay Gelap (Supaya teks putih terbaca) */}
+          {/* Overlay Gelap */}
           <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
           
-          {/* --- FOGGY EFFECT (UPDATED) --- */}
+          {/* --- PERBAIKAN FOGGY EFFECT (COLOR INTERPOLATION) --- */}
+          {/* Kuncinya: Jangan gunakan 'to-transparent'. Gunakan 'to-warna/0' */}
           
-          {/* Layer 1: Gradasi Halus dari Bawah ke Atas (Full Screen) */}
-          {/* Menggunakan 'via' dengan opacity tinggi supaya warna solid naik lebih tinggi */}
-          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment via-cream-parchment/60 to-transparent dark:from-forest-deep dark:via-forest-deep/80 dark:to-transparent"></div>
+          {/* Layer 1: Gradasi Atmosfer (Full Screen) */}
+          <div className="absolute inset-0 bg-gradient-to-t 
+            from-cream-parchment via-cream-parchment/50 to-cream-parchment/0
+            dark:from-forest-deep dark:via-forest-deep/50 dark:to-forest-deep/0
+            opacity-100">
+          </div>
           
-          {/* Layer 2: Penutup Bawah (Blocking) */}
-          {/* Ini untuk memastikan bagian paling bawah 100% solid menyatu dengan section berikutnya */}
-          <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment to-cream-parchment/0 dark:from-forest-deep dark:to-forest-deep/0"></div>
-          
-          {/* Layer 3: Vignette Halus (Opsional, mempercantik fokus tengah) */}
-          <div className="absolute inset-0 bg-radial-gradient from-transparent via-transparent to-black/20 pointer-events-none"></div>
+          {/* Layer 2: Base Blending (Bagian Bawah Tebal) */}
+          <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t 
+            from-cream-parchment via-cream-parchment/90 to-cream-parchment/0
+            dark:from-forest-deep dark:via-forest-deep/90 dark:to-forest-deep/0">
+          </div>
         </div>
 
         {/* Content */}
@@ -78,7 +79,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. FILOSOFI KELEPON */}
+      {/* 3. FILOSOFI KELEPON (No Border, Tilt Animation) */}
       <section className="py-20 px-6 lg:px-20 bg-cream-parchment dark:bg-forest-deep">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
@@ -121,7 +122,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. SEJARAH ES POTENG */}
+      {/* 4. SEJARAH ES POTENG (No Border, Tilt Animation) */}
       <section className="py-20 px-6 lg:px-20 bg-gold-aged/5 dark:bg-black/10">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
