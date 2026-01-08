@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; // Tambahkan React di sini
 import { Routes, Route, Link, useLocation } from 'react-router-dom'; // Import Router
 import Home from './pages/Home'; // Import Halaman Home
 import Menu from './pages/Menu'; // Import Halaman Menu
