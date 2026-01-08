@@ -3,14 +3,38 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const navigate = useNavigate();
 
+  // Data Preview Menu untuk di Home
+  const featuredMenu = [
+    {
+      id: 1,
+      name: 'Kelepon Kecerit',
+      price: '15.000',
+      desc: 'Sensasi manis gula aren cair yang meledak di mulut.',
+      image: '/kelepon.png',
+      rotate: 'rotate-2', // Rotasi default
+      link: '/menu'
+    },
+    {
+      id: 2,
+      name: 'Es Poteng',
+      price: '12.000',
+      desc: 'Kesegaran tape singkong fermentasi yang manis dan lembut.',
+      image: '/es-poteng.png',
+      rotate: '-rotate-2', // Rotasi default berlawanan
+      link: '/menu'
+    }
+  ];
+
   return (
     <>
-      {/* 1. HERO SECTION (Sesuai Gambar: Merawat Tradisi) */}
+      {/* 1. HERO SECTION (Foggy Effect dari Code Kamu + Teks dari Gambar) */}
       <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
+        {/* Background & Foggy Effects */}
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
-          <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
-          {/* Gradient halus di bawah supaya nyambung ke section berikutnya */}
+          <div className="absolute inset-0 bg-black/40 mix-blend-multiply"></div>
+          
+          {/* FOGGY GRADIENT (Sesuai Request) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent opacity-100 h-full"></div>
           <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
 
@@ -18,11 +42,12 @@ const Home = () => {
           <span className="rounded-full bg-white/10 backdrop-blur-md px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] text-gold-aged border border-gold-aged/50 mb-6 inline-block shadow-xl">
             Kelompok PKKWU
           </span>
-          <h1 className="text-cream-parchment text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
+          {/* Teks Sesuai Gambar Referensi */}
+          <h1 className="text-white text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
             Merawat Tradisi, <br/>
             <span className="text-primary italic">Menyajikan Rasa</span>
           </h1>
-          <p className="text-gray-200 text-lg md:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-md">
+          <p className="text-gray-100 text-lg sm:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-md">
             Perjalanan kami dalam menggali kembali harta karun kuliner Bumi Gora. Dedikasi untuk melestarikan Kelepon Kecerit dan Es Poteng bagi generasi masa depan.
           </p>
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
@@ -33,7 +58,35 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 2. VISI MISI (Sesuai Gambar: Mengangkat Kearifan Lokal) */}
+      {/* 2. PREVIEW MENU (Dengan Animasi Hover Code Kamu) */}
+      <section className="px-4 lg:px-20 py-20 relative z-20 -mt-20">
+        <div className="container mx-auto max-w-[1000px]">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {featuredMenu.map((item) => (
+              <div key={item.id} className="relative group cursor-pointer" onClick={() => navigate(item.link)}>
+                {/* ANIMASI GAMBAR: Rotate default, lurus pas hover */}
+                <div className={`relative rounded-3xl overflow-hidden shadow-2xl ${item.rotate} hover:rotate-0 transition-transform duration-500 ring-1 ring-white/10 h-[300px] md:h-[400px]`}>
+                   <img 
+                    src={item.image} 
+                    alt={item.name} 
+                    className="w-full h-full object-cover hover:scale-110 transition-transform duration-700" // Efek scale & filter
+                   />
+                   <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-90"></div>
+                   
+                   {/* Text Overlay di dalam gambar */}
+                   <div className="absolute bottom-0 left-0 p-8 w-full">
+                      <h3 className="text-3xl font-display font-bold text-white mb-2">{item.name}</h3>
+                      <p className="text-gray-300 text-sm mb-4 line-clamp-2 font-body">{item.desc}</p>
+                      <span className="text-primary font-bold text-xl">Rp {item.price}</span>
+                   </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 3. VISI MISI (Sesuai Gambar: Mengangkat Kearifan Lokal) */}
       <section className="px-4 lg:px-20 py-20 bg-cream-parchment dark:bg-forest-deep">
         <div className="container mx-auto max-w-[900px]">
           <div className="bg-white/50 dark:bg-black/20 border border-gold-aged/20 rounded-[2rem] p-10 md:p-16 text-center shadow-lg relative">
@@ -57,7 +110,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 3. FILOSOFI KELEPON (Sesuai Gambar: Kiri Teks, Kanan Gambar) */}
+      {/* 4. FILOSOFI KELEPON (Sesuai Gambar: Kiri Teks, Kanan Gambar) */}
       <section className="py-20 px-6 lg:px-20 bg-cream-parchment dark:bg-forest-deep">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
@@ -76,10 +129,9 @@ const Home = () => {
                 ini menggambarkan sensasi <span className="font-bold text-primary">meletus</span>-nya gula aren cair saat gigitan pertama.
               </p>
               
-              {/* Quote Box Style */}
               <div className="bg-primary/10 border-l-4 border-primary p-6 rounded-r-xl mt-8">
                 <p className="italic text-forest-deep dark:text-gold-aged font-serif text-lg leading-relaxed">
-                  "Setiap butir kelepon dibuat dengan ketelitian, memastikan gula aren di dalamnya matang sempurna dan siap meledak di mulut Anda."
+                  "Setiap butir kelepon dibuat dengan ketelitian, memastikan gula aren di dalamnya matang sempurna."
                 </p>
                 <div className="mt-4 text-xs font-bold text-primary uppercase tracking-widest">— Bahan Alami</div>
               </div>
@@ -100,7 +152,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 4. SEJARAH ES POTENG (Sesuai Gambar: Kiri Gambar, Kanan Teks) */}
+      {/* 5. SEJARAH ES POTENG (Sesuai Gambar: Kiri Gambar, Kanan Teks) */}
       <section className="py-20 px-6 lg:px-20 bg-gold-aged/5 dark:bg-black/10">
         <div className="container mx-auto max-w-[1100px]">
           <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
@@ -155,7 +207,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 5. KOMITMEN KAMI (Sesuai Gambar: Center Text) */}
+      {/* 6. KOMITMEN KAMI (Sesuai Gambar: Center Text) */}
       <section className="py-24 px-6 bg-cream-parchment dark:bg-forest-deep">
         <div className="container mx-auto max-w-4xl text-center">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-forest-deep text-gold-aged rounded-full mb-8 shadow-xl">
@@ -188,10 +240,9 @@ const Home = () => {
         </div>
       </section>
 
-      {/* 6. TESTIMONIALS SECTION (TETAP SAMA SEPERTI PERMINTAAN) */}
+      {/* 7. TESTIMONIALS (KATA MEREKA - TETAP ADA) */}
       <section className="py-24 px-4 lg:px-20 relative overflow-hidden bg-white/50 dark:bg-[#052e21]">
         <div className="container mx-auto max-w-[1000px]">
-          {/* Section Header */}
           <div className="text-center mb-16 animate-fade-in-up">
             <span className="text-primary font-bold tracking-widest text-xs uppercase mb-2 block">
               Kata Mereka
@@ -204,7 +255,6 @@ const Home = () => {
             </p>
           </div>
 
-          {/* Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
@@ -227,7 +277,6 @@ const Home = () => {
                 key={idx} 
                 className="bg-white dark:bg-[#052e21] p-8 rounded-3xl shadow-xl border border-gold-aged/10 hover:-translate-y-2 transition-transform duration-300 flex flex-col"
               >
-                {/* Stars */}
                 <div className="flex gap-1 text-primary mb-6">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <span 
@@ -240,12 +289,10 @@ const Home = () => {
                   ))}
                 </div>
                 
-                {/* Quote */}
                 <p className="text-secondary dark:text-gray-300 font-body mb-8 italic leading-relaxed flex-1">
                   "{item.text}"
                 </p>
                 
-                {/* Profile */}
                 <div className="flex items-center gap-4 mt-auto border-t border-gray-100 dark:border-white/10 pt-6">
                   <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
                     {item.name.charAt(0)}
