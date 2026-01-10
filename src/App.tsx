@@ -18,28 +18,16 @@ interface CartItem extends Product {
   quantity: number;
 }
 
-interface CustomerInfo {
-  name: string;
-  waNumber: string; // Mengganti Email jadi Nomor WA
-  address: string;
-}
-
 function App() {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
-  // State Keranjang & Checkout
+  // State Keranjang & Tema (Tidak ada lagi state Checkout/CustomerInfo)
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
   
-  // State Data Pemesan
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
-    name: '', waNumber: '', address: ''
-  });
-
   // DATA PRODUK MASTER
   const products: Product[] = [
     {
@@ -68,8 +56,7 @@ function App() {
     }
   ];
 
-  // NOMOR WA ADMIN (Ganti dengan nomor asli kelompok kalian, format 62...)
-  // Contoh: 6281234567890
+  // --- KONTAK ADMIN (HANYA WA) ---
   const adminWaNumber = "6281807852840"; 
 
   // --- LOGIKA PROGRAM ---
@@ -169,12 +156,10 @@ function App() {
   const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
-  // --- LOGIKA ORDER VIA WHATSAPP (UPDATE) ---
-  const handleSubmitOrder = (e: React.FormEvent) => {
-    e.preventDefault();
+  // --- LOGIKA ORDER LANGSUNG KE WHATSAPP (TANPA FORM) ---
+  const handleDirectWhatsAppOrder = () => {
     if (cart.length === 0) return;
 
-    // 1. Buat Format Pesan WhatsApp
     let message = `Halo Admin Beranda Kuliner NTB, saya mau pesan:\n\n`;
     
     // List Produk
@@ -184,22 +169,15 @@ function App() {
     
     message += `\n--------------------------------\n*Total: Rp ${totalPrice.toLocaleString('id-ID')}*\n--------------------------------\n\n`;
     
-    // Data Diri
-    message += `*Data Pemesan:*\n`;
-    message += `Nama: ${customerInfo.name}\n`;
-    message += `No. WA: ${customerInfo.waNumber}\n`; // Tampilkan nomor WA pembeli
-    message += `Alamat: ${customerInfo.address}\n\n`;
-    message += `Mohon diproses ya, terima kasih!`;
+    // Placeholder Biodata untuk diisi di WA
+    message += `Mohon info pembayarannya ya kak.\n\n*Biodata Saya:*\nNama: ...\nAlamat: ...`;
 
-    // 2. Encode Pesan untuk URL
+    // Buka WhatsApp
     const encodedMessage = encodeURIComponent(message);
-
-    // 3. Buka Link WhatsApp (New Tab)
     const waLink = `https://wa.me/${adminWaNumber}?text=${encodedMessage}`;
     window.open(waLink, '_blank');
 
-    // 4. Tutup Modal
-    setIsCheckoutOpen(false);
+    // Tutup keranjang
     setIsCartOpen(false);
   };
 
@@ -218,6 +196,7 @@ function App() {
           </h2>
         </Link>
         
+        {/* Desktop Menu */}
         <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
           <nav className="flex items-center gap-8">
             <Link to="/" className={getLinkClass('/')}>Beranda</Link>
@@ -239,6 +218,7 @@ function App() {
           </button>
         </div>
 
+        {/* Mobile Menu & Actions */}
         <div className="lg:hidden flex items-center gap-3">
           <button onClick={toggleTheme} className={iconBtnClass}>
             <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
@@ -255,7 +235,7 @@ function App() {
         </div>
       </header>
 
-      {/* --- MOBILE MENU --- */}
+      {/* --- MOBILE MENU DROPDOWN --- */}
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/98 dark:bg-[#052e21]/98 backdrop-blur-xl pt-24 px-6 animate-fade-in-up">
           <nav className="flex flex-col gap-6 text-center">
@@ -267,7 +247,7 @@ function App() {
         </div>
       )}
 
-      {/* --- CONTENT --- */}
+      {/* --- CONTENT AREA --- */}
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
@@ -311,52 +291,19 @@ function App() {
                   <span>Total:</span>
                   <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
                 </div>
-                <button onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }} className="w-full py-3 rounded-lg bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all">Checkout Sekarang</button>
+                
+                {/* TOMBOL CHECKOUT LANGSUNG KE WA */}
+                <button 
+                  onClick={handleDirectWhatsAppOrder} 
+                  className="w-full py-4 rounded-xl bg-[#25D366] text-white font-bold shadow-lg hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2"
+                >
+                  <span className="material-symbols-outlined text-xl">chat</span>
+                  Pesan via WhatsApp
+                </button>
               </div>
             )}
           </div>
         </>
-      )}
-
-      {/* --- CHECKOUT MODAL (UPDATE: WhatsApp Form) --- */}
-      {isCheckoutOpen && (
-        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsCheckoutOpen(false)}></div>
-          <div className="relative bg-cream-parchment dark:bg-[#0a2e25] p-8 rounded-3xl shadow-2xl max-w-md w-full animate-fade-in-up border border-gold-aged/20">
-            <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 text-center">Data Pemesan</h3>
-            
-            <form onSubmit={handleSubmitOrder} className="space-y-4">
-              {/* Nama */}
-              <div>
-                <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Nama Lengkap</label>
-                <input required type="text" placeholder="Contoh: Raka" value={customerInfo.name} onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white" />
-              </div>
-
-              {/* Input Nomor WA (Baru) */}
-              <div>
-                <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Nomor WhatsApp</label>
-                <input required type="tel" placeholder="Contoh: 0812xxxxxx" value={customerInfo.waNumber} onChange={(e) => setCustomerInfo({...customerInfo, waNumber: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white" />
-              </div>
-
-              {/* Alamat */}
-              <div>
-                <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Alamat Lengkap</label>
-                <textarea required rows={3} placeholder="Alamat pengiriman..." value={customerInfo.address} onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white resize-none"></textarea>
-              </div>
-
-              <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => setIsCheckoutOpen(false)} className="flex-1 py-3 rounded-xl border border-gold-aged/50 text-forest-deep dark:text-gold-aged font-bold hover:bg-black/5">Batal</button>
-                
-                {/* Tombol Kirim WA */}
-                <button type="submit" className="flex-1 py-3 rounded-xl bg-[#25D366] text-white font-bold shadow-lg hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2">
-                   {/* Ikon WA sederhana */}
-                   <svg viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5"><path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.592 2.654-.698c.93.513 1.733.702 2.803.702 3.182 0 5.768-2.587 5.768-5.766.001-3.187-2.575-5.783-5.765-5.783zm6.127 3.828c.224.324.365.713.404 1.144.004.052.004.106.004.158 0 .502-.136 1.002-.382 1.442-.249.444-.582.784-1.028 1.028-.445.244-.949.38-1.451.38-.285 0-.583-.047-.866-.134-1.792-.553-3.08-2.071-3.593-3.876-.081-.283-.129-.581-.129-.865 0-.501.135-1.001.38-1.446.248-.445.584-.787 1.03-1.032.443-.245.946-.381 1.447-.381.565 0 1.107.169 1.58.487l.6.416-.252.684zm-3.826 6.845c-.456.096-.957.145-1.494.145-3.073 0-5.83-2.195-6.526-5.267-.099-.44-.148-.895-.148-1.353 0-1.285.408-2.535 1.171-3.606l-.914-3.329 3.414.896c1.014-.668 2.179-1.025 3.403-1.025 3.398 0 6.162 2.763 6.163 6.16 0 1.597-.604 3.097-1.701 4.226-1.096 1.127-2.553 1.748-4.111 1.748-1.12 0-2.185-.32-3.109-.92l-3.326.879.907-3.303c-.636-.956-1.006-2.036-1.006-3.204 0-3.197 2.602-5.8 5.801-5.8 1.55 0 3.007.604 4.102 1.701 1.095 1.095 1.699 2.55 1.699 4.099 0 3.197-2.603 5.8-5.802 5.8-.979 0-1.897-.245-2.735-.705l.707-.406z"/></svg>
-                   Kirim via WA
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
       )}
 
       {/* --- FOOTER --- */}
@@ -377,8 +324,8 @@ function App() {
             </div>
             <div>
               <h4 className="text-gold-aged font-bold mb-4">Kontak</h4>
-              <p className="text-sm text-gray-300 mb-2">Email: {adminEmail}</p>
-              <p className="text-sm text-gray-300">Telp: +{adminWaNumber}</p>
+              {/* Email dihapus dari tampilan footer agar konsisten WA only */}
+              <p className="text-sm text-gray-300">WA Admin: +{adminWaNumber}</p>
             </div>
           </div>
           <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">© 2025 Kelompok PKKWU. All rights reserved.</div>
