@@ -20,8 +20,8 @@ const About = () => {
         
         {/* Background Image */}
         <div 
-          className="absolute inset-0 bg-cover bg-top" // UPDATE: bg-center diganti bg-top agar wajah tidak terpotong
-          style={{ backgroundImage: `url("/tim.jpg")` }} // UPDATE: Menggunakan foto tim.jpg
+          className="absolute inset-0 bg-cover bg-center" // UPDATE: bg-center diganti bg-top agar wajah tidak terpotong
+          style={{ backgroundImage: `url("/tim1.jpg")` }} // UPDATE: Menggunakan foto tim.jpg
         >
           {/* Overlay Gelap (Opacity dikurangi sedikit biar wajah lebih jelas) */}
           <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
