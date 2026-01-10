@@ -45,7 +45,7 @@ const About = () => {
           </div>
 
           <h1 className="text-4xl md:text-5xl font-display font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
-            Sinergi Rasa & <br/> <span className="text-primary italic">Teknologi</span>
+            Kelompok <br/> <span className="text-primary italic">Five'R</span>
           </h1>
         </div>
       </section>
