@@ -67,13 +67,17 @@ const Menu = ({ products, addToCart }: MenuProps) => {
   return (
     <div className="min-h-screen relative bg-cream-parchment dark:bg-forest-deep transition-colors duration-500">
       
-      {/* 1. HERO MENU (Agar Navbar Transparan terlihat bagus) */}
+      {/* 1. HERO MENU */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/bahan.png")` }}>
-          <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
-          {/* Foggy Gradient Menu */}
-          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
+          {/* Overlay Tipis (Supaya gambar lebih terang) */}
+          <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
+          
+          {/* FOG FIX: Gradasi dari Atas (Bening) ke Bawah (Warna Background) */}
+          {/* via-transparent memastikan bagian tengah gambar tetap jelas */}
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-cream-parchment dark:to-forest-deep"></div>
         </div>
+        
         <div className="relative z-10 text-center px-4 animate-fade-in-up pt-10">
           <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged/50 bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md">
             <span className="material-symbols-outlined text-sm">restaurant_menu</span> Katalog Rasa
@@ -81,14 +85,14 @@ const Menu = ({ products, addToCart }: MenuProps) => {
           <h1 className="text-4xl md:text-6xl font-display font-extrabold text-white mb-4 drop-shadow-lg">
             Jelajahi Menu Kami
           </h1>
-          <p className="text-gray-200 max-w-lg mx-auto font-body text-lg">
+          <p className="text-gray-200 max-w-lg mx-auto font-body text-lg drop-shadow-md">
             Setiap hidangan memiliki cerita. Temukan rasa otentik Bumi Gora di sini.
           </p>
         </div>
       </section>
 
       {/* 2. CONTENT */}
-      <div className="container mx-auto max-w-[1200px] px-4 lg:px-20 relative z-20 -mt-20">
+      <div className="container mx-auto max-w-[1200px] px-4 lg:px-20 relative z-20 -mt-10">
         
         {/* Filter Tabs */}
         <div className="flex flex-wrap justify-center gap-3 mb-12 animate-fade-in-up">
@@ -114,10 +118,6 @@ const Menu = ({ products, addToCart }: MenuProps) => {
             return (
               <div 
                 key={product.id} 
-                // --- FIX BORDER FLICKERING/SQUARE ---
-                // translateZ(0) memaksa hardware acceleration
-                // backfaceVisibility hidden menyembunyikan sisi belakang elemen saat animasi
-                // WebkitMaskImage memastikan clipping radius tetap terjadi
                 style={{ 
                   WebkitMaskImage: '-webkit-radial-gradient(white, black)',
                   transform: 'translateZ(0)', 
@@ -174,7 +174,7 @@ const Menu = ({ products, addToCart }: MenuProps) => {
 
       </div>
 
-      {/* --- NEW PREMIUM MODAL (POPUP) --- */}
+      {/* --- PREMIUM MODAL (POPUP) --- */}
       {selectedProduct && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-forest-deep/80 backdrop-blur-md transition-opacity" onClick={() => setSelectedProduct(null)}></div>
