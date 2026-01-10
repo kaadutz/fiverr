@@ -139,7 +139,7 @@ function App() {
     e.preventDefault();
     if (cart.length === 0) return;
     const subject = `Pesanan Baru dari ${customerInfo.name}`;
-    let body = `Halo Admin Beranda Kuliner NTB,\n\nSaya ingin memesan produk berikut:\n\n`;
+    let body = `Halo Admin Fiver,\n\nSaya ingin memesan produk berikut:\n\n`;
     cart.forEach((item, index) => {
       body += `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
     });
@@ -169,7 +169,7 @@ function App() {
         <Link to="/" className="flex items-center gap-3 cursor-pointer group" onClick={scrollToTop}>
           <img src="/logo-fiverr.png" alt="Logo" className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" />
           <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
-            Beranda Kuliner <br/><span className="text-primary">NTB</span>
+           Kuliner <br/><span className="text-primary">Nusa Tenggara Barat</span>
           </h2>
         </Link>
         
