@@ -39,10 +39,10 @@ const Home = () => {
           
           {/* Badge: Adaptif (Hijau pudar di Light, Putih pudar di Dark) */}
           <span className="rounded-full px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] mb-6 inline-block shadow-xl backdrop-blur-md
-            bg-forest-deep/10 text-forest-deep border border-forest-deep/20
-            dark:bg-white/10 dark:text-gold-aged dark:border-gold-aged/50 transition-colors duration-500">
-            Kelompok PKKWU
-          </span>
+  bg-gold-aged/10 text-gold-aged border border-gold-aged/50
+  transition-colors duration-500">
+  Kelompok PKKWU
+</span>
 
           {/* JUDUL UTAMA: Forest Deep di Light Mode, White di Dark Mode */}
           <h1 className="text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-sm mb-6 transition-colors duration-500
