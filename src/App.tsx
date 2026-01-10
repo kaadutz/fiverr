@@ -3,7 +3,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 
-// Tipe Data
+// Tipe Data Global
 interface Product {
   id: string;
   name: string;
@@ -29,7 +29,7 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
-  // State Keranjang & Produk
+  // State Keranjang
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -37,7 +37,7 @@ function App() {
     name: '', email: '', address: ''
   });
 
-  // DATA PRODUK
+  // DATA PRODUK (Master Data)
   const products: Product[] = [
     {
       id: 'kelepon',
@@ -45,7 +45,7 @@ function App() {
       price: 15000,
       image: '/kelepon.png',
       category: 'Makanan Ringan',
-      description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair asli. Sensasi "kecerit" (meletus) saat digigit memberikan pengalaman rasa manis yang unik.'
+      description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair asli. Sensasi "kecerit" (meletus) saat digigit.'
     },
     {
       id: 'es-poteng',
@@ -53,7 +53,7 @@ function App() {
       price: 12000,
       image: '/es-poteng.png',
       category: 'Minuman & Dessert',
-      description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) pilihan yang difermentasi dengan ragi tradisional. Disajikan dingin dengan es serut dan sirup manis alami.'
+      description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) pilihan yang difermentasi dengan ragi tradisional. Disajikan dingin dengan es serut.'
     },
     {
       id: 'paket-hemat',
@@ -61,7 +61,7 @@ function App() {
       price: 25000,
       image: '/hero-bg.png', 
       category: 'Paket Hemat',
-      description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris kami dengan harga yang lebih terjangkau.'
+      description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
     }
   ];
 
@@ -102,40 +102,38 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- LOGIKA TAMPILAN NAVBAR (PENTING) ---
-  // Navbar Transparan HANYA JIKA: Halaman Home DAN Belum Scroll
-  const isHomePage = location.pathname === '/';
-  const isTransparentNav = isHomePage && !scrolled;
+  // --- LOGIKA NAVBAR (UPDATE: Berlaku untuk Home & Menu) ---
+  const isTransparentNav = (location.pathname === '/' || location.pathname === '/menu') && !scrolled;
 
-  // 1. Logika Warna Background Navbar
+  // Kelas Background Navbar
   const navbarBgClass = isTransparentNav 
-    ? 'bg-transparent py-6 border-b border-transparent' // Transparan total di awal Home
-    : 'bg-cream-parchment/95 dark:bg-[#052e21]/95 shadow-lg backdrop-blur-md py-3 border-b border-primary/10'; // Solid saat scroll/di menu lain
+    ? 'bg-transparent py-6 border-b border-transparent' 
+    : 'bg-cream-parchment/95 dark:bg-[#052e21]/95 shadow-lg backdrop-blur-md py-3 border-b border-primary/10';
 
-  // 2. Logika Warna Teks Logo ("Beranda Kuliner")
-  const logoTextClass = isTransparentNav
-    ? "hidden sm:block text-white text-lg font-display font-bold leading-tight drop-shadow-md" // Putih di Hero
-    : "hidden sm:block text-forest-deep dark:text-white text-lg font-display font-bold leading-tight"; // Hijau (Light) & PUTIH (Dark Mode Request Anda)
-
-  // 3. Logika Warna Link Menu
+  // Kelas Teks Link
   const getLinkClass = (path: string) => {
     const isActive = location.pathname === path;
     const base = "text-sm font-bold transition-colors tracking-wide";
     
-    if (isActive) return `${base} text-primary`; // Aktif selalu Gold
+    if (isActive) return `${base} text-primary`;
     
     return isTransparentNav 
-      ? `${base} text-white hover:text-primary drop-shadow-sm` // Putih di Hero
-      : `${base} text-forest-deep dark:text-gray-300 hover:text-primary`; // Gelap/Abu di Solid
+      ? `${base} text-white hover:text-primary drop-shadow-md` 
+      : `${base} text-forest-deep dark:text-gray-300 hover:text-primary`;
   };
 
-  // 4. Logika Warna Tombol Icon (Theme/Cart)
-  const iconClass = isTransparentNav
+  // Kelas Logo Text
+  const logoTextClass = isTransparentNav
+    ? "hidden sm:block text-white text-lg font-display font-bold leading-tight drop-shadow-md"
+    : "hidden sm:block text-forest-deep dark:text-white text-lg font-display font-bold leading-tight";
+
+  // Kelas Icon Button
+  const iconBtnClass = isTransparentNav
     ? "p-2 rounded-full bg-white/10 text-white hover:bg-primary transition-all border border-white/20 backdrop-blur-sm"
-    : "p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all";
+    : "p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all border border-transparent dark:border-white/10";
 
 
-  // --- CART FUNCTIONS (TETAP SAMA) ---
+  // --- CART FUNCTIONS ---
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
@@ -172,12 +170,11 @@ function App() {
     e.preventDefault();
     if (cart.length === 0) return;
     const subject = `Pesanan Baru dari ${customerInfo.name}`;
-    let body = `Halo Admin Beranda Kuliner NTB,\n\nSaya ingin memesan produk berikut:\n\n`;
+    let body = `Halo Admin Beranda Kuliner NTB,\n\nSaya ingin memesan:\n`;
     cart.forEach((item, index) => {
       body += `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
     });
-    body += `\n-----------------------------------\nTOTAL HARGA: Rp ${totalPrice.toLocaleString('id-ID')}\n-----------------------------------\n\n`;
-    body += `Data Pemesan:\nNama: ${customerInfo.name}\nEmail: ${customerInfo.email}\nAlamat Pengiriman: ${customerInfo.address}\n\nMohon segera diproses. Terima kasih!`;
+    body += `\nTotal: Rp ${totalPrice.toLocaleString('id-ID')}\n\nData Pemesan:\nNama: ${customerInfo.name}\nEmail: ${customerInfo.email}\nAlamat: ${customerInfo.address}`;
     window.location.href = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setIsCheckoutOpen(false);
     setIsCartOpen(false);
@@ -186,11 +183,10 @@ function App() {
   return (
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-500 relative flex flex-col">
       
-      {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-10 bg-heritage-pattern z-0 mix-blend-overlay"></div>
-      <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 bg-gradient-to-b from-transparent via-black/20 to-black/60 z-0"></div>
+      {/* Background Pattern Global */}
+      <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-5 bg-heritage-pattern z-0 mix-blend-overlay"></div>
 
-      {/* --- HEADER / NAVBAR --- */}
+      {/* --- HEADER --- */}
       <header className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-500 ${navbarBgClass}`}>
         <Link to="/" className="flex items-center gap-3 cursor-pointer group" onClick={scrollToTop}>
           <img src="/logo-fiverr.png" alt="Logo" className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" />
@@ -202,18 +198,12 @@ function App() {
         {/* Desktop Menu */}
         <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
           <nav className="flex items-center gap-8">
-            <Link to="/" className={getLinkClass('/')}>
-              Beranda
-            </Link>
-            <Link to="/menu" className={getLinkClass('/menu')}>
-              Menu
-            </Link>
-            <a href="/#about" className={isTransparentNav ? "text-sm font-bold text-white hover:text-primary transition-colors tracking-wide drop-shadow-md" : "text-sm font-bold text-forest-deep dark:text-gray-300 hover:text-primary transition-colors tracking-wide"}>
-              Tentang Kami
-            </a>
+            <Link to="/" className={getLinkClass('/')}>Beranda</Link>
+            <Link to="/menu" className={getLinkClass('/menu')}>Menu</Link>
+            <a href="/#about" className={getLinkClass('#about')}>Tentang Kami</a>
           </nav>
 
-          <button onClick={toggleTheme} className={iconClass}>
+          <button onClick={toggleTheme} className={iconBtnClass}>
             <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
           </button>
 
@@ -229,7 +219,7 @@ function App() {
 
         {/* Mobile Menu & Actions */}
         <div className="lg:hidden flex items-center gap-3">
-          <button onClick={toggleTheme} className={iconClass}>
+          <button onClick={toggleTheme} className={iconBtnClass}>
             <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
           </button>
 
@@ -264,9 +254,7 @@ function App() {
         </Routes>
       </div>
 
-      {/* ... (CART, CHECKOUT, FOOTER SAMA SEPERTI SEBELUMNYA) ... */}
-      
-      {/* 1. CART DRAWER */}
+      {/* --- CART DRAWER --- */}
       {isCartOpen && (
         <>
           <div className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm transition-opacity" onClick={() => setIsCartOpen(false)}></div>
@@ -301,25 +289,19 @@ function App() {
                   <span>Total:</span>
                   <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
                 </div>
-                <button 
-                  onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}
-                  className="w-full py-3 rounded-lg bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all"
-                >
-                  Checkout Sekarang
-                </button>
+                <button onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }} className="w-full py-3 rounded-lg bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all">Checkout Sekarang</button>
               </div>
             )}
           </div>
         </>
       )}
 
-      {/* 2. CHECKOUT FORM POPUP */}
+      {/* --- CHECKOUT MODAL --- */}
       {isCheckoutOpen && (
         <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsCheckoutOpen(false)}></div>
           <div className="relative bg-cream-parchment dark:bg-[#0a2e25] p-8 rounded-3xl shadow-2xl max-w-md w-full animate-fade-in-up border border-gold-aged/20">
             <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 text-center">Data Pemesan</h3>
-            
             <form onSubmit={handleSubmitOrder} className="space-y-4">
               <div>
                 <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Nama Lengkap</label>
@@ -333,7 +315,6 @@ function App() {
                 <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Alamat Lengkap</label>
                 <textarea required rows={3} value={customerInfo.address} onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white resize-none"></textarea>
               </div>
-
               <div className="pt-4 flex gap-3">
                 <button type="button" onClick={() => setIsCheckoutOpen(false)} className="flex-1 py-3 rounded-xl border border-gold-aged/50 text-forest-deep dark:text-gold-aged font-bold hover:bg-black/5">Batal</button>
                 <button type="submit" className="flex-1 py-3 rounded-xl bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all">Kirim Order</button>
@@ -343,7 +324,7 @@ function App() {
         </div>
       )}
 
-      {/* 3. FOOTER */}
+      {/* --- FOOTER & BACK TO TOP --- */}
       <footer className="bg-forest-deep dark:bg-[#021812] text-white py-16 px-6 lg:px-20 border-t-4 border-primary mt-auto">
         <div className="container mx-auto max-w-[1200px] text-center md:text-left">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
@@ -364,17 +345,13 @@ function App() {
               <p className="text-sm text-gray-300">Telp: +62 818-0785-2840</p>
             </div>
           </div>
-          <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">
-            © 2025 Kelompok PKKWU. All rights reserved.
-          </div>
+          <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">© 2025 Kelompok PKKWU.</div>
         </div>
       </footer>
 
-      {/* 4. BACK TO TOP */}
       <button onClick={scrollToTop} className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-white shadow-xl transition-all duration-300 transform hover:bg-gold-aged hover:scale-110 ${showBackToTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
         <span className="material-symbols-outlined text-2xl">arrow_upward</span>
       </button>
-
     </div>
   );
 }
