@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
+import About from './pages/About'; // Import halaman About
 
-// Tipe Data Global
+// --- TIPE DATA ---
 interface Product {
   id: string;
   name: string;
@@ -29,7 +30,7 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
-  // State Keranjang
+  // State Keranjang & Checkout
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
@@ -37,13 +38,13 @@ function App() {
     name: '', email: '', address: ''
   });
 
-  // DATA PRODUK (Master Data)
+  // DATA PRODUK MASTER
   const products: Product[] = [
     {
       id: 'kelepon',
       name: 'Kelepon Kecerit',
       price: 15000,
-      image: '/keleponcu.png',
+      image: '/kelepon.png',
       category: 'Makanan Ringan',
       description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair asli. Sensasi "kecerit" (meletus) saat digigit.'
     },
@@ -59,7 +60,7 @@ function App() {
       id: 'paket-hemat',
       name: 'Paket Beranda',
       price: 25000,
-      image: '/paket.png', 
+      image: '/hero-bg.png', 
       category: 'Paket Hemat',
       description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
     }
@@ -67,8 +68,9 @@ function App() {
 
   const adminEmail = "admin@kulinerntb.id"; 
 
-  // --- LOGIKA UTAMA ---
+  // --- LOGIKA PROGRAM ---
 
+  // Detect Scroll
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
@@ -78,6 +80,7 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Theme Handling
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';
@@ -102,38 +105,44 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- LOGIKA NAVBAR (UPDATE: Berlaku untuk Home & Menu) ---
-  const isTransparentNav = (location.pathname === '/' || location.pathname === '/menu') && !scrolled;
+  // --- LOGIKA NAVBAR DINAMIS ---
+  
+  // Navbar Transparan jika: di Home/Menu/About DAN belum scroll
+  const isTransparentNav = (
+    location.pathname === '/' || 
+    location.pathname === '/menu' || 
+    location.pathname === '/about'
+  ) && !scrolled;
 
-  // Kelas Background Navbar
+  // 1. Background Navbar
   const navbarBgClass = isTransparentNav 
     ? 'bg-transparent py-6 border-b border-transparent' 
     : 'bg-cream-parchment/95 dark:bg-[#052e21]/95 shadow-lg backdrop-blur-md py-3 border-b border-primary/10';
 
-  // Kelas Teks Link
-  const getLinkClass = (path: string) => {
-    const isActive = location.pathname === path;
-    const base = "text-sm font-bold transition-colors tracking-wide";
-    
-    if (isActive) return `${base} text-primary`;
-    
-    return isTransparentNav 
-      ? `${base} text-white hover:text-primary drop-shadow-md` 
-      : `${base} text-forest-deep dark:text-gray-300 hover:text-primary`;
-  };
-
-  // Kelas Logo Text
+  // 2. Warna Teks Logo "Beranda Kuliner"
   const logoTextClass = isTransparentNav
     ? "hidden sm:block text-white text-lg font-display font-bold leading-tight drop-shadow-md"
     : "hidden sm:block text-forest-deep dark:text-white text-lg font-display font-bold leading-tight";
 
-  // Kelas Icon Button
+  // 3. Warna Link Navigasi
+  const getLinkClass = (path: string) => {
+    const isActive = location.pathname === path;
+    const base = "text-sm font-bold transition-colors tracking-wide";
+    
+    if (isActive) return `${base} text-primary`; // Aktif = Gold
+    
+    return isTransparentNav 
+      ? `${base} text-white hover:text-primary drop-shadow-sm` 
+      : `${base} text-forest-deep dark:text-gray-300 hover:text-primary`;
+  };
+
+  // 4. Warna Tombol Icon
   const iconBtnClass = isTransparentNav
     ? "p-2 rounded-full bg-white/10 text-white hover:bg-primary transition-all border border-white/20 backdrop-blur-sm"
     : "p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all border border-transparent dark:border-white/10";
 
 
-  // --- CART FUNCTIONS ---
+  // --- CART & CHECKOUT LOGIC ---
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
@@ -183,7 +192,7 @@ function App() {
   return (
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-500 relative flex flex-col">
       
-      {/* Background Pattern Global */}
+      {/* Global Background Pattern */}
       <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-5 bg-heritage-pattern z-0 mix-blend-overlay"></div>
 
       {/* --- HEADER --- */}
@@ -200,7 +209,7 @@ function App() {
           <nav className="flex items-center gap-8">
             <Link to="/" className={getLinkClass('/')}>Beranda</Link>
             <Link to="/menu" className={getLinkClass('/menu')}>Menu</Link>
-            <a href="/#about" className={getLinkClass('#about')}>Tentang Kami</a>
+            <Link to="/about" className={getLinkClass('/about')}>Tentang Kami</Link>
           </nav>
 
           <button onClick={toggleTheme} className={iconBtnClass}>
@@ -240,7 +249,7 @@ function App() {
           <nav className="flex flex-col gap-6 text-center">
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Beranda</Link>
             <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Menu</Link>
-            <a href="/#about" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Tentang Kami</a>
+            <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Tentang Kami</Link>
             <button onClick={() => setIsMenuOpen(false)} className="mt-8 text-lg font-bold text-red-500">Tutup Menu</button>
           </nav>
         </div>
@@ -251,6 +260,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu products={products} addToCart={addToCart} />} />
+          <Route path="/about" element={<About />} />
         </Routes>
       </div>
 
@@ -337,6 +347,7 @@ function App() {
               <ul className="space-y-2 text-sm text-gray-300">
                 <li><Link to="/" className="hover:text-primary">Beranda</Link></li>
                 <li><Link to="/menu" className="hover:text-primary">Menu</Link></li>
+                <li><Link to="/about" className="hover:text-primary">Tentang Kami</Link></li>
               </ul>
             </div>
             <div>
@@ -345,7 +356,7 @@ function App() {
               <p className="text-sm text-gray-300">Telp: +62 818-0785-2840</p>
             </div>
           </div>
-          <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">© 2025 Kelompok PKKWU.</div>
+          <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">© 2025 Kelompok PKKWU. All rights reserved.</div>
         </div>
       </footer>
 
