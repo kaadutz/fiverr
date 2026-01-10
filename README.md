@@ -59,7 +59,7 @@ Mengangkat cita rasa warisan leluhur Bumi Gora (Nusa Tenggara Barat) agar tetap 
 
 Kami adalah siswa kelas 12 RPL SMKN 71 Jakarta:
 
-* **Raka Anugrah Satya** - *Fullstack Developer & Team Member*
+* **Raka Anugrah Satya** - *Team Member*
 * **Royyan Arga** - *Team Member*
 * **Raihan Adilio** - *Team Member*
 * **Raditya Nugroho** - *Team Member*
@@ -93,7 +93,7 @@ Ikuti langkah ini untuk menjalankan website di komputer lokal:
 
 ## 🎨 Kredit Aset
 
-* **Foto Produk & Hero**: Dibuat menggunakan **AI Generative** (Midjourney/DALL-E) dengan *prompt engineering* khusus untuk mendapatkan visual makanan tradisional yang realistis.
+* **Foto Produk & Hero**: Dibuat menggunakan **AI Generative** (Neo Banana) dengan *prompt engineering* khusus untuk mendapatkan visual makanan tradisional yang realistis.
 * **Logo**: Desain original kelompok.
 
 ---
