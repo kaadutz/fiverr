@@ -49,7 +49,7 @@ function App() {
     },
     {
       id: 'paket-hemat',
-      name: 'Paket Beranda',
+      name: 'Paket',
       price: 25000,
       image: '/hero-bg.png', 
       category: 'Paket Hemat',
@@ -158,7 +158,7 @@ function App() {
   const handleDirectWhatsAppOrder = () => {
     if (cart.length === 0) return;
 
-    let message = `Halo Admin Beranda Kuliner NTB, saya mau pesan:\n\n`;
+    let message = `Halo Admin Fiver, saya mau pesan:\n\n`;
     
     // List Produk
     cart.forEach((item, index) => {
@@ -190,7 +190,7 @@ function App() {
         <Link to="/" className="flex items-center gap-3 cursor-pointer group" onClick={scrollToTop}>
           <img src="/logo-fiverr.png" alt="Logo" className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" />
           <h2 className={logoTextClass}>
-            Beranda Kuliner <br/><span className="text-primary">NTB</span>
+             Kuliner <br/><span className="text-primary">Nusa Tenggara Barat</span>
           </h2>
         </Link>
         
@@ -309,7 +309,7 @@ function App() {
         <div className="container mx-auto max-w-[1200px] text-center md:text-left">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             <div>
-              <h3 className="text-xl font-display font-bold text-gold-aged mb-4">Beranda Kuliner NTB</h3>
+              <h3 className="text-xl font-display font-bold text-gold-aged mb-4">Kuliner Nusa Tenggara Barat</h3>
               <p className="text-gray-400 text-sm">Menghadirkan kehangatan tradisi Nusa Tenggara Barat ke meja makan Anda.</p>
             </div>
             <div>
