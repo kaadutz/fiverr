@@ -33,7 +33,7 @@ const About = () => {
             <span className="material-symbols-outlined text-sm">school</span> Project Sekolah
           </div>
           <h1 className="text-4xl md:text-5xl font-display font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
-            Tentang Kami<br/>
+            Tentang Kami <br/> <span className="text-primary italic">Five'r</span>
           </h1>
         </div>
       </section>
