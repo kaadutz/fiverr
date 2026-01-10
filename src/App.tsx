@@ -3,6 +3,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import About from './pages/About';
+import Culture from './pages/Culture';
 import { adminWaNumber, adminEmail } from './constants';
 
 // --- TIPE DATA ---
@@ -96,7 +97,8 @@ function App() {
   const isTransparentNav = (
     location.pathname === '/' || 
     location.pathname === '/menu' || 
-    location.pathname === '/about'
+    location.pathname === '/about' ||
+    location.pathname === '/culture'
   ) && !scrolled;
 
   const navbarBgClass = isTransparentNav 
@@ -199,6 +201,7 @@ function App() {
           <nav className="flex items-center gap-8">
             <Link to="/" className={getLinkClass('/')}>Beranda</Link>
             <Link to="/menu" className={getLinkClass('/menu')}>Menu</Link>
+            <Link to="/culture" className={getLinkClass('/culture')}>Budaya</Link>
             <Link to="/about" className={getLinkClass('/about')}>Tentang Kami</Link>
           </nav>
 
@@ -239,6 +242,7 @@ function App() {
           <nav className="flex flex-col gap-6 text-center">
             <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Beranda</Link>
             <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Menu</Link>
+            <Link to="/culture" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Budaya</Link>
             <Link to="/about" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Tentang Kami</Link>
             <button onClick={() => setIsMenuOpen(false)} className="mt-8 text-lg font-bold text-red-500">Tutup Menu</button>
           </nav>
@@ -250,6 +254,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/menu" element={<Menu products={products} addToCart={addToCart} />} />
+          <Route path="/culture" element={<Culture />} />
           <Route path="/about" element={<About />} />
         </Routes>
       </div>
@@ -317,6 +322,7 @@ function App() {
               <ul className="space-y-2 text-sm text-gray-300">
                 <li><Link to="/" className="hover:text-primary">Beranda</Link></li>
                 <li><Link to="/menu" className="hover:text-primary">Menu</Link></li>
+                <li><Link to="/culture" className="hover:text-primary">Budaya</Link></li>
                 <li><Link to="/about" className="hover:text-primary">Tentang Kami</Link></li>
               </ul>
             </div>
