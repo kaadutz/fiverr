@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import About from './pages/About';
+import { adminWaNumber, adminEmail } from './constants';
 
 // --- TIPE DATA ---
 interface Product {
@@ -55,10 +56,6 @@ function App() {
       description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
     }
   ];
-
-  // --- KONTAK ADMIN (PENTING: Jangan dihapus agar tidak error) ---
-  const adminWaNumber = "6281807852840"; 
-  const adminEmail = "admin@kulinerntb.id"; 
 
   // --- LOGIKA PROGRAM ---
 
