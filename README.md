@@ -1,73 +1,112 @@
-# Beranda Kuliner NTB 🍢🍧
+<div align="center">
+  <img src="public/logo-fiverr.png" alt="Logo Beranda Kuliner NTB" width="120" height="120">
+  
+  <h1 style="margin-top: 20px;">Beranda Kuliner NTB</h1>
+  
+  <p>
+    <strong>Website Pemasaran Produk Kreatif & Kewirausahaan (PKKWU)</strong><br>
+    SMK Negeri 71 Jakarta — Rekayasa Perangkat Lunak (RPL)
+  </p>
 
-Selamat datang di repository **Beranda Kuliner NTB**. Website ini merupakan landing page yang dibuat untuk memenuhi tugas **Ujian Praktek PKKWU (Prakarya dan Kewirausahaan)**.
+  <p>
+    <a href="https://react.dev/">
+      <img src="https://img.shields.io/badge/Built%20With-React-blue?style=for-the-badge&logo=react" alt="React">
+    </a>
+    <a href="https://tailwindcss.com/">
+      <img src="https://img.shields.io/badge/Styled%20With-Tailwind%20CSS-38bdf8?style=for-the-badge&logo=tailwindcss" alt="Tailwind CSS">
+    </a>
+    <a href="https://vitejs.dev/">
+      <img src="https://img.shields.io/badge/Bundled%20With-Vite-646cff?style=for-the-badge&logo=vite" alt="Vite">
+    </a>
+  </p>
+</div>
 
-Website ini bertujuan untuk mempromosikan dan melestarikan kuliner tradisional khas Nusa Tenggara Barat, khususnya **Kelepon Kecerit** dan **Es Poteng**.
+<br>
 
-🔗 **Live Demo:** [fiver-ntb.vercel.app](https://fiver-ntb.vercel.app)
+## 📖 Tentang Project
+
+Project ini dibuat sebagai bagian dari tugas **Ujian Praktek Mata Pelajaran PKKWU (Produk Kreatif dan Kewirausahaan)**.
+
+Sebagai siswa jurusan **Rekayasa Perangkat Lunak (RPL)**, kami ditantang untuk tidak hanya menciptakan produk kuliner nyata, tetapi juga membangun ekosistem pemasaran digitalnya sendiri. Website ini berfungsi sebagai *digital storefront* untuk memperkenalkan dan memasarkan produk kuliner tradisional kami: **Kelepon Kecerit** dan **Es Poteng**.
+
+### 🌟 Visi Kami
+Mengangkat cita rasa warisan leluhur Bumi Gora (Nusa Tenggara Barat) agar tetap relevan dan diminati oleh generasi digital melalui pengemasan modern dan aksesibilitas teknologi.
 
 ---
 
-## 👥 Anggota Kelompok
+## 📸 Galeri Produk
 
-Project ini dikerjakan oleh:
-
-1. **Raka Anugrah Satya**
-2. **Royyan Arga**
-3. **Raihan Adilio**
-4. **Raditya Nugroho**
-5. **Romulus Pandapotan**
+| **Kelepon Kecerit** | **Es Poteng** |
+|:---:|:---:|
+| <img src="public/kelepon.png" width="300" alt="Kelepon Kecerit"> | <img src="public/es-poteng.png" width="300" alt="Es Poteng"> |
+| *Sensasi gula aren meletus di mulut* | *Kesegaran fermentasi tape singkong* |
 
 ---
 
-## ✨ Fitur
+## 🚀 Fitur Utama Website
 
-- **Tampilan Responsif:** Desain yang menyesuaikan tampilan di Desktop dan Mobile.
-- **Menu Showcase:** Menampilkan detail menu andalan (Kelepon Kecerit & Es Poteng) dengan deskripsi dan harga.
-- **Smooth Scrolling:** Navigasi yang halus antar bagian halaman.
-- **Desain Modern:** Menggunakan perpaduan warna Cream Parchment, Forest Deep, dan Gold Aged untuk nuansa tradisional namun elegan.
+* **Modern Heritage Design**: Antarmuka pengguna (UI) yang menggabungkan nuansa tradisional (parchment/forest green) dengan gaya modern (glassmorphism).
+* **Responsive & Interactive**: Tampilan optimal di Mobile dan Desktop dengan animasi halus.
+* **Dynamic Dark Mode**: Mendukung tema gelap dan terang dengan transisi warna otomatis.
+* **Product Catalog**: Halaman menu interaktif dengan detail nutrisi, bahan baku, dan cerita produk.
+* **Shopping Cart System**: Fitur keranjang belanja sederhana untuk simulasi pemesanan.
+* **Direct Order via Email**: Checkout otomatis yang mengarahkan pesanan ke email admin.
 
 ---
 
 ## 🛠️ Teknologi yang Digunakan
 
-- [React](https://react.dev/) - Library JavaScript untuk membangun antarmuka pengguna.
-- [TypeScript](https://www.typescriptlang.org/) - Superset JavaScript dengan tipe data statis.
-- [Vite](https://vitejs.dev/) - Build tool yang cepat untuk pengembangan frontend modern.
-- [Tailwind CSS](https://tailwindcss.com/) - Framework CSS utility-first untuk styling yang cepat.
+* **Frontend Framework**: [React](https://reactjs.org/) + [TypeScript](https://www.typescriptlang.org/)
+* **Styling**: [Tailwind CSS](https://tailwindcss.com/)
+* **Build Tool**: [Vite](https://vitejs.dev/)
+* **Icons**: Material Symbols Outlined
+* **Deploy**: Vercel
 
 ---
 
-## 🚀 Cara Menjalankan Project (Installation)
+## 👥 Anggota Kelompok
 
-Ikuti langkah-langkah berikut untuk menjalankan project ini di komputer lokal Anda:
+Kami adalah siswa kelas 12 RPL SMKN 71 Jakarta:
 
-1. **Clone Repository**
-   ```bash
-   git clone <repository-url>
-   ```
-
-2. **Masuk ke Direktori Project**
-   ```bash
-   cd vite-react
-   ```
-
-3. **Install Dependencies**
-   Pastikan Anda sudah menginstall [Node.js](https://nodejs.org/).
-   ```bash
-   npm install
-   ```
-
-4. **Jalankan Development Server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Buka di Browser**
-   Buka alamat yang muncul di terminal (biasanya `http://localhost:5173`).
+* **Raka Anugrah Satya** - *Fullstack Developer & Team Member*
+* **Royyan Arga** - *Team Member*
+* **Raihan Adilio** - *Team Member*
+* **Raditya Nugroho** - *Team Member*
+* **Romulus Pandapotan** - *Team Member*
 
 ---
 
-## 📝 Catatan
+## 💻 Cara Menjalankan (Development)
 
-Project ini dibuat untuk keperluan pendidikan dan ujian praktek sekolah.
+Ikuti langkah ini untuk menjalankan website di komputer lokal:
+
+1.  **Clone Repository**
+    ```bash
+    git clone [https://github.com/username-anda/nama-repo.git](https://github.com/username-anda/nama-repo.git)
+    cd nama-repo
+    ```
+
+2.  **Install Dependencies**
+    ```bash
+    npm install
+    ```
+
+3.  **Jalankan Server Lokal**
+    ```bash
+    npm run dev
+    ```
+
+4.  Buka browser dan akses `http://localhost:5173`
+
+---
+
+## 🎨 Kredit Aset
+
+* **Foto Produk & Hero**: Dibuat menggunakan **AI Generative** (Midjourney/DALL-E) dengan *prompt engineering* khusus untuk mendapatkan visual makanan tradisional yang realistis.
+* **Logo**: Desain original kelompok.
+
+---
+
+<div align="center">
+  <small>&copy; 2025 Kelompok PKKWU SMKN 71 Jakarta. Dibuat dengan ❤️ dan ☕</small>
+</div>
