@@ -34,15 +34,6 @@ Mengangkat cita rasa warisan leluhur Bumi Gora (Nusa Tenggara Barat) agar tetap 
 
 ---
 
-## 📸 Galeri Produk
-
-| **Kelepon Kecerit** | **Es Poteng** |
-|:---:|:---:|
-| <img src="public/kelepon.png" width="300" alt="Kelepon Kecerit"> | <img src="public/es-poteng.png" width="300" alt="Es Poteng"> |
-| *Sensasi gula aren meletus di mulut* | *Kesegaran fermentasi tape singkong* |
-
----
-
 ## 🚀 Fitur Utama Website
 
 * **Modern Heritage Design**: Antarmuka pengguna (UI) yang menggabungkan nuansa tradisional (parchment/forest green) dengan gaya modern (glassmorphism).
