@@ -1,7 +1,7 @@
 <div align="center">
   <img src="public/logo-fiverr.png" alt="Logo Beranda Kuliner NTB" width="120" height="120">
   
-  <h1 style="margin-top: 20px;">Beranda Kuliner NTB</h1>
+  <h1 style="margin-top: 20px;">Kuliner NTB</h1>
   
   <p>
     <strong>Website Pemasaran Produk Kreatif & Kewirausahaan (PKKWU)</strong><br>
