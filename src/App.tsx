@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 import About from './pages/About';
+import { adminWaNumber, adminEmail } from './constants';
 
 // --- TIPE DATA ---
 interface Product {
@@ -55,10 +56,6 @@ function App() {
       description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
     }
   ];
-
-  // --- KONTAK ADMIN (PENTING: JANGAN DIHAPUS AGAR TIDAK ERROR) ---
-  const adminWaNumber = "6281807852840"; 
-  const adminEmail = "admin@kulinerntb.id"; 
 
   // --- LOGIKA PROGRAM ---
 
@@ -293,7 +290,7 @@ function App() {
                   <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
                 </div>
                 
-                {/* TOMBOL CHECKOUT LANGSUNG KE WA */}
+                {/* TOMBOL CHECKOUT LANGSUNG KE WA (Tanpa Modal) */}
                 <button 
                   onClick={handleDirectWhatsAppOrder} 
                   className="w-full py-4 rounded-xl bg-[#25D366] text-white font-bold shadow-lg hover:bg-[#128C7E] transition-all flex items-center justify-center gap-2"
@@ -325,7 +322,7 @@ function App() {
             </div>
             <div>
               <h4 className="text-gold-aged font-bold mb-4">Kontak</h4>
-              {/* Email dan WA ditampilkan di sini */}
+              {/* Email Aman Disini */}
               <p className="text-sm text-gray-300 mb-2">Email: {adminEmail}</p>
               <p className="text-sm text-gray-300">WA Admin: +{adminWaNumber}</p>
             </div>
