@@ -56,8 +56,7 @@ function App() {
     }
   ];
 
-  // --- KONTAK ADMIN ---
-  // Variabel ini DIKEMBALIKAN agar error hilang dan bisa tampil di footer
+  // --- KONTAK ADMIN (PENTING: Jangan dihapus agar tidak error) ---
   const adminWaNumber = "6281807852840"; 
   const adminEmail = "admin@kulinerntb.id"; 
 
@@ -326,7 +325,7 @@ function App() {
             </div>
             <div>
               <h4 className="text-gold-aged font-bold mb-4">Kontak</h4>
-              {/* Email ditampilkan kembali */}
+              {/* Variable adminEmail digunakan di sini, jadi harus dideklarasikan di atas */}
               <p className="text-sm text-gray-300 mb-2">Email: {adminEmail}</p>
               <p className="text-sm text-gray-300">WA Admin: +{adminWaNumber}</p>
             </div>
