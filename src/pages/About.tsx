@@ -14,19 +14,36 @@ const About = () => {
   return (
     <div className="min-h-screen bg-cream-parchment dark:bg-forest-deep transition-colors duration-500 overflow-x-hidden">
       
-      {/* 1. HERO SECTION (Kembali ke Background Abstrak/Pemandangan agar Teks Jelas) */}
+      {/* 1. HERO SECTION */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-        {/* Menggunakan hero-bg.png lagi supaya bersih */}
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/sekolahbg.jpg")` }}>
-          <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
+        
+        {/* BACKGROUND LAYER */}
+        <div className="absolute inset-0">
+            {/* Gambar Background */}
+            <div 
+                className="absolute inset-0 bg-cover bg-center" 
+                style={{ backgroundImage: `url("/sekolahbg.jpg")` }}
+            ></div>
+
+            {/* A. Dark Overlay (Supaya teks putih terbaca jelas & tidak silau) */}
+            <div className="absolute inset-0 bg-black/50"></div>
+
+            {/* B. The "Fog" Gradient (PERBAIKAN DISINI) 
+               - Menggunakan bottom-0
+               - Tinggi agak besar (h-3/4 atau sekitar 75% tinggi hero) supaya smooth
+               - Gradasi dari Warna Background -> Transparent 
+            */}
+            <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent"></div>
         </div>
 
         {/* Content */}
         <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in-up pt-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged/50 bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
+          
+          {/* Badge Project Sekolah - Warna Emas */}
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md shadow-lg shadow-gold-aged/5">
             <span className="material-symbols-outlined text-sm">school</span> Project Sekolah
           </div>
+
           <h1 className="text-4xl md:text-5xl font-display font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
             Sinergi Rasa & <br/> <span className="text-primary italic">Teknologi</span>
           </h1>
@@ -82,7 +99,7 @@ const About = () => {
         </div>
       </section>
 
-      {/* --- 4. SECTION BARU: FOTO TIM (4:3) --- */}
+      {/* 4. FOTO TIM (4:3) */}
       <section className="pb-20 px-6 lg:px-20">
         <div className="container mx-auto max-w-[800px]">
           {/* Frame Foto Estetik */}
@@ -110,7 +127,7 @@ const About = () => {
                 </div>
              </div>
 
-             {/* Dekorasi Pin / Tape (Optional Vibe) */}
+             {/* Dekorasi Pin / Tape */}
              <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-primary/20 backdrop-blur-md rounded-full border border-white/20 shadow-lg flex items-center justify-center">
                 <div className="w-2 h-2 rounded-full bg-gold-aged animate-pulse"></div>
              </div>
