@@ -15,25 +15,32 @@ const About = () => {
     <div className="min-h-screen bg-cream-parchment dark:bg-forest-deep transition-colors duration-500 overflow-x-hidden">
       
       {/* 1. HERO SECTION */}
-      <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+      {/* UPDATE: Tinggi ditambah jadi h-[60vh] agar foto lebih terlihat utuh */}
+      <section className="relative h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
+        
         {/* Background Image */}
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/tim.jpg")` }}>
-          <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
-          {/* Foggy Gradient */}
-          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-top" // UPDATE: bg-center diganti bg-top agar wajah tidak terpotong
+          style={{ backgroundImage: `url("/tim.jpg")` }} // UPDATE: Menggunakan foto tim.jpg
+        >
+          {/* Overlay Gelap (Opacity dikurangi sedikit biar wajah lebih jelas) */}
+          <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
+          
+          {/* Foggy Gradient (Hanya di bagian bawah agar tidak menutupi wajah) */}
+          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent"></div>
         </div>
 
-        {/* --- DEKORASI MOTIF HERO (BULET-BULET) --- */}
+        {/* --- DEKORASI MOTIF HERO --- */}
         <div className="absolute top-10 left-10 w-32 h-32 bg-gold-aged/20 rounded-full blur-2xl animate-float"></div>
         <div className="absolute bottom-20 right-10 w-48 h-48 bg-primary/20 rounded-full blur-3xl animate-float" style={{ animationDelay: '1s' }}></div>
         
         {/* Content */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in-up pt-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged/50 bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in-up pt-20">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-white/30 bg-white/10 text-white text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
             <span className="material-symbols-outlined text-sm">school</span> Project Sekolah
           </div>
-          <h1 className="text-4xl md:text-5xl font-display font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
-            Tentang Kami <br/> <span className="text-primary italic">Five'r</span>
+          <h1 className="text-4xl md:text-6xl font-display font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
+            Sinergi Rasa & <br/> <span className="text-primary italic">Teknologi</span>
           </h1>
         </div>
       </section>
@@ -43,7 +50,7 @@ const About = () => {
         <div className="container mx-auto max-w-[900px]">
           <div className="bg-white dark:bg-[#082f25] p-10 md:p-14 rounded-[2.5rem] shadow-2xl border border-gold-aged/20 text-center relative overflow-hidden">
             
-            {/* --- MOTIF SUDUT (BULET) --- */}
+            {/* --- MOTIF SUDUT --- */}
             <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 rounded-br-[5rem]"></div>
             <div className="absolute bottom-0 right-0 w-32 h-32 bg-gold-aged/5 rounded-tl-[5rem]"></div>
 
@@ -82,7 +89,6 @@ const About = () => {
                 key={idx} 
                 className="bg-white dark:bg-[#0a2e25] rounded-3xl p-6 text-center shadow-lg border border-gold-aged/10 hover:-translate-y-2 transition-transform duration-300 group relative overflow-hidden"
               >
-                {/* Motif Hover Halus di Belakang Kartu */}
                 <div className="absolute -top-10 -right-10 w-20 h-20 bg-primary/5 rounded-full group-hover:bg-primary/10 transition-colors"></div>
 
                 <div className="w-20 h-20 mx-auto bg-gray-200 dark:bg-white/5 rounded-full mb-4 overflow-hidden border border-gold-aged/30 relative z-10">
@@ -100,15 +106,11 @@ const About = () => {
         </div>
       </section>
 
-      {/* 4. CTA SECTION (Dengan Motif Bulet-Bulet) */}
+      {/* 4. CTA SECTION */}
       <section className="py-20 bg-forest-deep dark:bg-[#051f1a] text-center px-6 relative overflow-hidden">
-        
-        {/* --- MOTIF DEKORASI AGAR TIDAK MONOTON --- */}
-        {/* Lingkaran Besar Transparan */}
+        {/* Motif Dekorasi */}
         <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-64 h-64 border-2 border-white/5 rounded-full"></div>
         <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
-        
-        {/* Lingkaran Kecil Aksen Emas */}
         <div className="absolute top-10 right-20 w-4 h-4 bg-gold-aged/30 rounded-full"></div>
         <div className="absolute bottom-10 left-20 w-8 h-8 bg-gold-aged/20 rounded-full"></div>
 
