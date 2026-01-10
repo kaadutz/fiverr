@@ -17,7 +17,7 @@ const About = () => {
       {/* 1. HERO SECTION */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         {/* Background Image */}
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/tim.jpg")` }}>
           <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
           {/* Foggy Gradient */}
           <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
