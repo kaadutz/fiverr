@@ -15,48 +15,31 @@ const Home = () => {
             style={{ backgroundImage: `url("/hero-bg.png")` }}
           ></div>
 
-          {/* Overlay Gelap (Hanya muncul di Dark Mode agar gambar tidak terlalu terang) */}
-          <div className="absolute inset-0 bg-black/0 dark:bg-black/40 mix-blend-multiply transition-colors duration-500"></div>
+          {/* Overlay Gelap Tipis (biar teks terbaca dikit) */}
+          <div className="absolute inset-0 bg-black/20 mix-blend-multiply"></div>
           
-          {/* --- FOGGY EFFECT (Color Interpolation) --- */}
-          
-          {/* Layer 1: Gradasi Atmosfer */}
-          <div className="absolute inset-0 bg-gradient-to-t 
-            from-cream-parchment via-cream-parchment/60 to-cream-parchment/10
-            dark:from-forest-deep dark:via-forest-deep/50 dark:to-forest-deep/0
-            opacity-100 transition-colors duration-500">
-          </div>
-          
-          {/* Layer 2: Base Blending (Bagian Bawah) */}
-          <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t 
-            from-cream-parchment via-cream-parchment/90 to-cream-parchment/0
-            dark:from-forest-deep dark:via-forest-deep/90 dark:to-forest-deep/0 transition-colors duration-500">
+          {/* --- FOGGY EFFECT (TIPIS & HALUS) --- */}
+          {/* Layer 1: Gradasi bawah (Pendek saja h-64) */}
+          <div className="absolute bottom-0 left-0 w-full h-64 bg-gradient-to-t 
+            from-cream-parchment via-cream-parchment/80 to-transparent
+            dark:from-forest-deep dark:via-forest-deep/80 dark:to-transparent">
           </div>
         </div>
 
         {/* Content */}
-        <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
-          
-          {/* Badge: Adaptif (Hijau pudar di Light, Putih pudar di Dark) */}
+        <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up mt-12">
           <span className="rounded-full px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] mb-6 inline-block shadow-xl backdrop-blur-md
-  bg-gold-aged/10 text-gold-aged border border-gold-aged/50
-  transition-colors duration-500">
-  Kelompok PKKWU
-</span>
-
-          {/* JUDUL UTAMA: Forest Deep di Light Mode, White di Dark Mode */}
-          <h1 className="text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-sm mb-6 transition-colors duration-500
-            text-forest-deep dark:text-white">
+            bg-gold-aged/10 text-gold-aged border border-gold-aged/50
+            transition-colors duration-500">
+            Kelompok PKKWU
+          </span>
+          <h1 className="text-white text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
             Merawat Tradisi, <br/>
             <span className="text-primary italic">Menyajikan Rasa</span>
           </h1>
-
-          {/* PARAGRAF: Secondary di Light Mode, Gray di Dark Mode */}
-          <p className="text-lg sm:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-sm transition-colors duration-500
-            text-secondary/90 dark:text-gray-100">
+          <p className="text-gray-100 text-lg sm:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-lg">
             Perjalanan kami dalam menggali kembali harta karun kuliner Bumi Gora. Dedikasi untuk melestarikan Kelepon Kecerit dan Es Poteng bagi generasi masa depan.
           </p>
-
           <div className="flex flex-col sm:flex-row gap-5 justify-center">
             <button onClick={() => navigate('/menu')} className="h-14 min-w-[180px] rounded-full bg-primary px-8 text-white text-lg font-display font-bold shadow-xl shadow-primary/40 transition-all hover:scale-105 hover:bg-gold-aged">
               Jelajahi Rasa
@@ -65,9 +48,8 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ... (BAGIAN BAWAHNYA BIARKAN TETAP SAMA SEPERTI SEBELUMNYA) ... */}
       {/* 2. VISI MISI */}
-      <section className="px-4 lg:px-20 py-20 bg-cream-parchment dark:bg-forest-deep relative z-20 -mt-1">
+      <section className="px-4 lg:px-20 py-20 bg-cream-parchment dark:bg-forest-deep relative z-20">
         <div className="container mx-auto max-w-[900px]">
           <div className="bg-white/50 dark:bg-black/20 border border-gold-aged/20 rounded-[2rem] p-10 md:p-16 text-center shadow-lg relative backdrop-blur-sm">
             <span className="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Visi & Misi</span>
