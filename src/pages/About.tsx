@@ -1,4 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { adminEmail } from '../constants';
 
 const teamMembers = [
   { name: 'Raka Anugrah Satya', role: 'Anggota Kelompok', quote: 'Melestarikan rasa lewat kode dan karsa.' },
@@ -8,8 +11,51 @@ const teamMembers = [
   { name: 'Romulus Pandapotan', role: 'Anggota Kelompok', quote: 'Inovasi modern untuk rasa tradisional.' },
 ];
 
+const faqs = [
+  {
+    question: "Apakah produk halal?",
+    answer: "Ya, 100% Halal. Semua bahan yang kami gunakan (gula aren, tepung ketan, singkong, ragi) adalah bahan alami dan diolah secara higienis tanpa alkohol (kecuali fermentasi alami tape yang halal menurut fatwa MUI)."
+  },
+  {
+    question: "Berapa lama produk tahan?",
+    answer: "Kelepon Kecerit sebaiknya dikonsumsi pada hari yang sama (tahan 24 jam suhu ruang). Es Poteng tahan hingga 5 hari jika disimpan di dalam kulkas (chiller)."
+  },
+  {
+    question: "Apakah bisa dikirim ke luar kota?",
+    answer: "Untuk saat ini, kami hanya melayani pengiriman area Jakarta Timur dan sekitarnya (Same Day Delivery) demi menjaga kualitas dan kesegaran produk."
+  },
+  {
+    question: "Bagaimana cara penyajian terbaik?",
+    answer: "Kelepon paling nikmat disantap hangat. Jika sudah dingin, bisa dikukus sebentar (2-3 menit). Es Poteng paling segar disajikan dingin dengan es serut tambahan."
+  }
+];
+
 const About = () => {
   const navigate = useNavigate();
+  const { ref: storyRef, isVisible: isStoryVisible } = useScrollAnimation();
+  const { ref: faqRef, isVisible: isFaqVisible } = useScrollAnimation();
+  const { ref: contactRef, isVisible: isContactVisible } = useScrollAnimation();
+
+  // FAQ State
+  const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(null);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
+
+  // Contact Form State
+  const [formData, setFormData] = useState({
+    name: '',
+    subject: '',
+    message: ''
+  });
+
+  const handleContactSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const subject = encodeURIComponent(`[Website Inquiry] ${formData.subject}`);
+    const body = encodeURIComponent(`Halo, nama saya ${formData.name}.\n\n${formData.message}`);
+    window.location.href = `mailto:${adminEmail}?subject=${subject}&body=${body}`;
+  };
 
   return (
     <div className="min-h-screen bg-cream-parchment dark:bg-forest-deep transition-colors duration-500 overflow-x-hidden">
@@ -28,12 +74,11 @@ const About = () => {
             {/* A. Dark Overlay (Supaya teks putih terbaca jelas & tidak silau) */}
             <div className="absolute inset-0 bg-black/50"></div>
 
-            {/* B. The "Fog" Gradient (PERBAIKAN DISINI) 
-               - Menggunakan bottom-0
-               - Tinggi agak besar (h-3/4 atau sekitar 75% tinggi hero) supaya smooth
-               - Gradasi dari Warna Background -> Transparent 
+            {/* B. The "Fog" Gradient (FIXED)
+               - Using gradient-to-t (bottom to top)
+               - From solid color to transparent
             */}
-            <div className="absolute bottom-0 left-0 right-0 h-3/4 bg-gradient-to-t from-cream-parchment dark:from-forest-deep via-transparent to-transparent"></div>
+            <div className="absolute bottom-0 left-0 w-full h-32 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
 
         {/* Content */}
@@ -51,7 +96,7 @@ const About = () => {
       </section>
 
       {/* 2. STORY SECTION */}
-      <section className="py-16 px-6 lg:px-20 relative z-20 -mt-24">
+      <section ref={storyRef} className={`py-16 px-6 lg:px-20 relative z-20 -mt-24 transition-all duration-1000 ${isStoryVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
         <div className="container mx-auto max-w-[900px]">
           <div className="bg-white dark:bg-[#082f25] p-10 md:p-14 rounded-[2.5rem] shadow-2xl border border-gold-aged/20 text-center relative overflow-hidden">
             <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 rounded-br-[5rem]"></div>
@@ -135,7 +180,107 @@ const About = () => {
         </div>
       </section>
 
-      {/* 5. CTA SECTION */}
+      {/* 5. FAQ Section (NEW) */}
+      <section ref={faqRef} className={`py-20 px-6 lg:px-20 bg-white/50 dark:bg-black/20 transition-all duration-1000 ${isFaqVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className="container mx-auto max-w-[800px]">
+          <div className="text-center mb-12">
+            <span className="text-primary font-bold tracking-widest text-xs uppercase mb-2 block">Informasi</span>
+            <h2 className="text-3xl font-display font-bold text-forest-deep dark:text-gold-aged">Tanya Jawab (FAQ)</h2>
+          </div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <div key={index} className="bg-white dark:bg-[#0a2e25] rounded-2xl overflow-hidden border border-gold-aged/10 shadow-sm">
+                <button
+                  onClick={() => toggleFaq(index)}
+                  className="w-full flex items-center justify-between p-6 text-left focus:outline-none"
+                >
+                  <span className="font-bold text-forest-deep dark:text-white">{faq.question}</span>
+                  <span className={`material-symbols-outlined transition-transform duration-300 ${openFaqIndex === index ? 'rotate-180 text-primary' : 'text-gray-400'}`}>expand_more</span>
+                </button>
+                <div className={`px-6 text-secondary/80 dark:text-gray-300 font-body text-sm leading-relaxed transition-all duration-300 ease-in-out overflow-hidden ${openFaqIndex === index ? 'max-h-40 pb-6 opacity-100' : 'max-h-0 opacity-0'}`}>
+                  {faq.answer}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 6. CONTACT FORM (NEW) */}
+      <section ref={contactRef} className={`py-20 px-6 lg:px-20 transition-all duration-1000 ${isContactVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}>
+        <div className="container mx-auto max-w-[800px]">
+          <div className="bg-white dark:bg-[#082f25] rounded-[2.5rem] shadow-2xl overflow-hidden flex flex-col md:flex-row border border-gold-aged/20">
+
+            {/* Left/Top: Info */}
+            <div className="p-10 bg-forest-deep text-white md:w-2/5 flex flex-col justify-between relative overflow-hidden">
+               <div className="absolute top-0 right-0 w-32 h-32 bg-primary/10 rounded-bl-[5rem]"></div>
+               <div>
+                 <h3 className="text-2xl font-display font-bold text-gold-aged mb-4">Hubungi Kami</h3>
+                 <p className="text-sm text-gray-300 leading-relaxed mb-8">
+                   Punya saran, kritik, atau ingin memesan dalam jumlah besar? Jangan ragu untuk mengirim pesan kepada kami.
+                 </p>
+               </div>
+               <div className="space-y-4 text-sm">
+                 <div className="flex items-center gap-3">
+                   <span className="material-symbols-outlined text-gold-aged">email</span>
+                   <span>{adminEmail}</span>
+                 </div>
+                 <div className="flex items-center gap-3">
+                   <span className="material-symbols-outlined text-gold-aged">location_on</span>
+                   <span>SMKN 71 Jakarta</span>
+                 </div>
+               </div>
+            </div>
+
+            {/* Right/Bottom: Form */}
+            <div className="p-10 md:w-3/5">
+              <form onSubmit={handleContactSubmit} className="space-y-6">
+                <div>
+                  <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Nama</label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full bg-gray-50 dark:bg-black/20 border-b-2 border-gray-200 dark:border-white/10 p-3 outline-none focus:border-primary transition-colors text-forest-deep dark:text-white placeholder-gray-400"
+                    placeholder="Nama Lengkap"
+                    value={formData.name}
+                    onChange={(e) => setFormData({...formData, name: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Subjek</label>
+                  <input
+                    type="text"
+                    required
+                    className="w-full bg-gray-50 dark:bg-black/20 border-b-2 border-gray-200 dark:border-white/10 p-3 outline-none focus:border-primary transition-colors text-forest-deep dark:text-white placeholder-gray-400"
+                    placeholder="Topik Pesan"
+                    value={formData.subject}
+                    onChange={(e) => setFormData({...formData, subject: e.target.value})}
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase text-gray-400 mb-2">Pesan</label>
+                  <textarea
+                    required
+                    rows={4}
+                    className="w-full bg-gray-50 dark:bg-black/20 border-b-2 border-gray-200 dark:border-white/10 p-3 outline-none focus:border-primary transition-colors text-forest-deep dark:text-white placeholder-gray-400 resize-none"
+                    placeholder="Tulis pesan Anda di sini..."
+                    value={formData.message}
+                    onChange={(e) => setFormData({...formData, message: e.target.value})}
+                  ></textarea>
+                </div>
+                <button type="submit" className="w-full py-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-gold-aged transition-colors flex items-center justify-center gap-2">
+                  <span className="material-symbols-outlined text-lg">send</span>
+                  Kirim Pesan
+                </button>
+              </form>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      {/* 7. CTA SECTION */}
       <section className="py-20 bg-forest-deep dark:bg-[#051f1a] text-center px-6 relative overflow-hidden">
         <div className="container mx-auto max-w-2xl relative z-10">
           <h2 className="text-2xl md:text-3xl font-display font-bold text-gold-aged mb-6">
