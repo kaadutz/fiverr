@@ -69,7 +69,7 @@ const Menu = ({ products, addToCart }: MenuProps) => {
       
       {/* 1. HERO MENU */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/bahan.png")` }}>
           {/* Overlay Tipis (Supaya gambar lebih terang) */}
           <div className="absolute inset-0 bg-black/30 mix-blend-multiply"></div>
           
