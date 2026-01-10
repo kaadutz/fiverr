@@ -14,48 +14,36 @@ const About = () => {
   return (
     <div className="min-h-screen bg-cream-parchment dark:bg-forest-deep transition-colors duration-500 overflow-x-hidden">
       
-      {/* 1. HERO SECTION (FULL SCREEN) */}
-      <section className="relative w-full h-screen flex items-end justify-center overflow-hidden pb-12 md:pb-24">
-        
-        {/* Background Image */}
-        <div 
-          className="absolute inset-0 bg-cover bg-[center_top] md:bg-top" 
-          style={{ backgroundImage: `url("/tim.jpg")` }}
-        >
-          {/* FOG FIX: Ganti overlay gelap tebal dengan overlay tipis + fog bawah saja */}
-          
-          {/* 1. Overlay Tipis Rata (Agar gambar tidak terlalu silau tapi wajah JELAS) */}
-          <div className="absolute inset-0 bg-black/10"></div>
-
-          {/* 2. Fog Bawah (Supaya nyambung ke section bawah, tapi tidak nutupin wajah) */}
-          {/* via-transparent/60 membuat transisi lebih halus */}
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent/50 to-cream-parchment dark:to-forest-deep"></div>
+      {/* 1. HERO SECTION (Kembali ke Background Abstrak/Pemandangan agar Teks Jelas) */}
+      <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
+        {/* Menggunakan hero-bg.png lagi supaya bersih */}
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/sekolahbg.jpg")` }}>
+          <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
 
         {/* Content */}
-        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-white/30 bg-white/10 text-white text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md shadow-lg">
+        <div className="relative z-10 text-center px-6 max-w-4xl mx-auto animate-fade-in-up pt-10">
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged/50 bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-6 backdrop-blur-md">
             <span className="material-symbols-outlined text-sm">school</span> Project Sekolah
           </div>
-          <h1 className="text-3xl md:text-6xl font-display font-extrabold text-white mb-4 drop-shadow-2xl leading-tight">
+          <h1 className="text-4xl md:text-5xl font-display font-extrabold text-white mb-6 drop-shadow-lg leading-tight">
             Sinergi Rasa & <br/> <span className="text-primary italic">Teknologi</span>
           </h1>
-          <p className="text-white/90 text-sm md:text-lg max-w-2xl mx-auto font-body drop-shadow-lg font-bold">
-            SMKN 71 Jakarta — Rekayasa Perangkat Lunak
-          </p>
         </div>
       </section>
 
       {/* 2. STORY SECTION */}
-      <section className="py-20 px-6 lg:px-20 relative z-20 bg-cream-parchment dark:bg-forest-deep">
+      <section className="py-16 px-6 lg:px-20 relative z-20 -mt-24">
         <div className="container mx-auto max-w-[900px]">
-          <div className="bg-white dark:bg-[#082f25] p-10 md:p-14 rounded-[2.5rem] shadow-2xl border border-gold-aged/20 text-center relative overflow-hidden -mt-20 md:-mt-32 backdrop-blur-sm">
-            
+          <div className="bg-white dark:bg-[#082f25] p-10 md:p-14 rounded-[2.5rem] shadow-2xl border border-gold-aged/20 text-center relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-32 h-32 bg-primary/5 rounded-br-[5rem]"></div>
+            <div className="absolute bottom-0 right-0 w-32 h-32 bg-gold-aged/5 rounded-tl-[5rem]"></div>
+
             <span className="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Latar Belakang</span>
             <h2 className="text-3xl md:text-4xl font-display font-bold text-forest-deep dark:text-white mb-8">
               Anak RPL Masak? <br/> Kenapa Tidak.
             </h2>
-            
             <div className="text-secondary/80 dark:text-gray-300 font-body leading-loose space-y-6 text-lg text-justify md:text-center relative z-10">
               <p>
                 Kami adalah siswa kelas 12 dari <strong>SMKN 71 Jakarta</strong>, jurusan <strong>Rekayasa Perangkat Lunak (RPL)</strong>. 
@@ -67,12 +55,11 @@ const About = () => {
                 tapi juga bisa melestarikan kuliner tradisional seperti <em>Kelepon Kecerit</em> dan <em>Es Poteng</em> agar tetap relevan di era digital.
               </p>
             </div>
-
           </div>
         </div>
       </section>
 
-      {/* 3. TEAM SECTION */}
+      {/* 3. TEAM CARDS SECTION */}
       <section className="py-20 px-6 lg:px-20">
         <div className="container mx-auto max-w-[1100px]">
           <div className="text-center mb-12">
@@ -82,16 +69,10 @@ const About = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6 justify-center">
             {teamMembers.map((member, idx) => (
-              <div 
-                key={idx} 
-                className="bg-white dark:bg-[#0a2e25] rounded-3xl p-6 text-center shadow-lg border border-gold-aged/10 hover:-translate-y-2 transition-transform duration-300 group relative overflow-hidden"
-              >
+              <div key={idx} className="bg-white dark:bg-[#0a2e25] rounded-3xl p-6 text-center shadow-lg border border-gold-aged/10 hover:-translate-y-2 transition-transform duration-300 group relative overflow-hidden">
+                <div className="absolute -top-10 -right-10 w-20 h-20 bg-primary/5 rounded-full group-hover:bg-primary/10 transition-colors"></div>
                 <div className="w-20 h-20 mx-auto bg-gray-200 dark:bg-white/5 rounded-full mb-4 overflow-hidden border border-gold-aged/30 relative z-10">
-                  <img 
-                    src={`https://ui-avatars.com/api/?name=${member.name}&background=b8860b&color=fff&size=128`} 
-                    alt={member.name} 
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={`https://ui-avatars.com/api/?name=${member.name}&background=b8860b&color=fff&size=128`} alt={member.name} className="w-full h-full object-cover"/>
                 </div>
                 <h3 className="text-sm font-bold text-forest-deep dark:text-white mb-1 leading-tight relative z-10">{member.name}</h3>
                 <span className="text-[10px] font-bold text-primary uppercase tracking-wider block mb-3 relative z-10">{member.role}</span>
@@ -101,21 +82,48 @@ const About = () => {
         </div>
       </section>
 
-      {/* 4. CTA SECTION */}
-      <section className="py-20 bg-forest-deep dark:bg-[#051f1a] text-center px-6 relative overflow-hidden">
-        {/* Motif Dekorasi */}
-        <div className="absolute top-0 left-0 -translate-x-1/4 -translate-y-1/4 w-64 h-64 border-2 border-white/5 rounded-full"></div>
-        <div className="absolute bottom-0 right-0 translate-x-1/4 translate-y-1/4 w-80 h-80 bg-white/5 rounded-full blur-3xl"></div>
-        <div className="absolute top-10 right-20 w-4 h-4 bg-gold-aged/30 rounded-full"></div>
-        <div className="absolute bottom-10 left-20 w-8 h-8 bg-gold-aged/20 rounded-full"></div>
+      {/* --- 4. SECTION BARU: FOTO TIM (4:3) --- */}
+      <section className="pb-20 px-6 lg:px-20">
+        <div className="container mx-auto max-w-[800px]">
+          {/* Frame Foto Estetik */}
+          <div className="relative p-3 bg-white dark:bg-[#0a2e25] rounded-[2rem] shadow-2xl border border-gold-aged/20 transform hover:scale-[1.01] transition-transform duration-500">
+             {/* Aspect Ratio 4:3 Wrapper */}
+             <div className="aspect-[4/3] w-full relative rounded-[1.5rem] overflow-hidden">
+                <img 
+                  src="/tim.jpg" 
+                  alt="Foto Bersama Tim PKKWU SMKN 71" 
+                  className="w-full h-full object-cover"
+                />
+                
+                {/* Caption Overlay Halus */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-90"></div>
+                <div className="absolute bottom-6 left-6 md:bottom-8 md:left-8 text-white text-left">
+                  <span className="px-3 py-1 bg-primary text-white text-[10px] font-bold uppercase tracking-widest rounded-full mb-2 inline-block shadow-lg">
+                    Class of 2025
+                  </span>
+                  <h3 className="text-2xl md:text-3xl font-display font-bold leading-tight">
+                    Kebersamaan Kami
+                  </h3>
+                  <p className="text-gray-300 text-sm mt-1">
+                    SMKN 71 Jakarta
+                  </p>
+                </div>
+             </div>
 
+             {/* Dekorasi Pin / Tape (Optional Vibe) */}
+             <div className="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-primary/20 backdrop-blur-md rounded-full border border-white/20 shadow-lg flex items-center justify-center">
+                <div className="w-2 h-2 rounded-full bg-gold-aged animate-pulse"></div>
+             </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. CTA SECTION */}
+      <section className="py-20 bg-forest-deep dark:bg-[#051f1a] text-center px-6 relative overflow-hidden">
         <div className="container mx-auto max-w-2xl relative z-10">
           <h2 className="text-2xl md:text-3xl font-display font-bold text-gold-aged mb-6">
             Dukung Ujian Praktek Kami dengan Mencicipi Rasa
           </h2>
-          <p className="text-gray-400 text-sm mb-8 max-w-md mx-auto">
-            Setiap pesanan Anda sangat berarti bagi penilaian dan semangat kami dalam berkarya.
-          </p>
           <button 
             onClick={() => navigate('/menu')}
             className="px-8 py-3 bg-white text-forest-deep rounded-xl font-bold shadow-xl hover:bg-gold-aged hover:text-white hover:scale-105 transition-all duration-300 flex items-center justify-center gap-2 mx-auto"
