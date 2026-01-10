@@ -1,364 +1,300 @@
-import React, { useState, useEffect } from 'react';
-import { Routes, Route, Link, useLocation } from 'react-router-dom';
-import Home from './pages/Home';
-import Menu from './pages/Menu';
+import { useNavigate } from 'react-router-dom';
 
-// Tipe Data
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
-  category: string;
-  description: string;
-}
-
-interface CartItem extends Product {
-  quantity: number;
-}
-
-interface CustomerInfo {
-  name: string;
-  email: string;
-  address: string;
-}
-
-function App() {
-  const location = useLocation();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
-  const [showBackToTop, setShowBackToTop] = useState(false);
-  
-  // State Keranjang & Produk
-  const [cart, setCart] = useState<CartItem[]>([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  
-  const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
-    name: '', email: '', address: ''
-  });
-
-  // DATA PRODUK
-  const products: Product[] = [
-    {
-      id: 'kelepon',
-      name: 'Kelepon Kecerit',
-      price: 15000,
-      image: '/kelepon.png',
-      category: 'Makanan Ringan',
-      description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair asli. Sensasi "kecerit" (meletus) saat digigit memberikan pengalaman rasa manis yang unik.'
-    },
-    {
-      id: 'es-poteng',
-      name: 'Es Poteng',
-      price: 12000,
-      image: '/es-poteng.png',
-      category: 'Minuman & Dessert',
-      description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) pilihan yang difermentasi dengan ragi tradisional. Disajikan dingin dengan es serut dan sirup manis alami.'
-    },
-    {
-      id: 'paket-hemat',
-      name: 'Paket Beranda',
-      price: 25000,
-      image: '/hero-bg.png', 
-      category: 'Paket Hemat',
-      description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris kami dengan harga yang lebih terjangkau.'
-    }
-  ];
-
-  const adminEmail = "admin@kulinerntb.id"; 
-
-  // --- LOGIKA PROGRAM ---
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-      setShowBackToTop(window.scrollY > 300);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Theme Logic
-  const [theme, setTheme] = useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('theme') || 'light';
-    }
-    return 'light';
-  });
-
-  useEffect(() => {
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  const toggleTheme = () => {
-    setTheme(prev => prev === 'light' ? 'dark' : 'light');
-  };
-
-  const scrollToTop = () => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
-
-  // --- CART FUNCTIONS ---
-  const addToCart = (product: Product) => {
-    setCart((prevCart) => {
-      const existingItem = prevCart.find((item) => item.id === product.id);
-      if (existingItem) {
-        return prevCart.map((item) =>
-          item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
-        );
-      } else {
-        return [...prevCart, { ...product, quantity: 1 }];
-      }
-    });
-    setIsCartOpen(true);
-  };
-
-  const removeFromCart = (id: string) => {
-    setCart((prevCart) => 
-      prevCart.reduce((acc, item) => {
-        if (item.id === id) {
-          if (item.quantity > 1) {
-            acc.push({ ...item, quantity: item.quantity - 1 });
-          }
-        } else {
-          acc.push(item);
-        }
-        return acc;
-      }, [] as CartItem[])
-    );
-  };
-
-  const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
-
-  // --- CHECKOUT PROCESS (EMAIL) ---
-  const handleSubmitOrder = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (cart.length === 0) return;
-
-    const subject = `Pesanan Baru dari ${customerInfo.name}`;
-    let body = `Halo Admin Beranda Kuliner NTB,\n\nSaya ingin memesan produk berikut:\n\n`;
-    cart.forEach((item, index) => {
-      body += `${index + 1}. ${item.name} (${item.quantity}x) - Rp ${(item.price * item.quantity).toLocaleString('id-ID')}\n`;
-    });
-    body += `\n-----------------------------------\nTOTAL HARGA: Rp ${totalPrice.toLocaleString('id-ID')}\n-----------------------------------\n\n`;
-    body += `Data Pemesan:\nNama: ${customerInfo.name}\nEmail: ${customerInfo.email}\nAlamat Pengiriman: ${customerInfo.address}\n\nMohon segera diproses. Terima kasih!`;
-
-    window.location.href = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setIsCheckoutOpen(false);
-    setIsCartOpen(false);
-  };
+const Home = () => {
+  const navigate = useNavigate();
 
   return (
-    <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-500 relative flex flex-col">
-      
-      {/* Background Effects */}
-      <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-10 bg-heritage-pattern z-0 mix-blend-overlay"></div>
-      <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 bg-gradient-to-b from-transparent via-black/20 to-black/60 z-0"></div>
-
-      {/* --- HEADER / NAVBAR --- */}
-      <header 
-        className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-500 ${
-          scrolled 
-            ? 'bg-cream-parchment/95 dark:bg-[#052e21]/95 shadow-lg backdrop-blur-md py-3 border-b border-primary/10' 
-            : 'bg-transparent py-5 border-b border-transparent'
-        }`}
-      >
-        <Link to="/" className="flex items-center gap-3 cursor-pointer group" onClick={scrollToTop}>
-          <img src="/logo-fiverr.png" alt="Logo" className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" />
-          <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
-            Beranda Kuliner <br/><span className="text-primary">NTB</span>
-          </h2>
-        </Link>
+    <>
+      {/* 1. HERO SECTION */}
+      <section className="relative w-full h-screen min-h-[600px] flex items-center justify-center overflow-hidden bg-cream-parchment dark:bg-forest-deep">
         
-        {/* Desktop Menu */}
-        <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
-          <nav className="flex items-center gap-8">
-            <Link to="/" className={`text-sm font-bold transition-colors tracking-wide ${location.pathname === '/' ? 'text-primary' : 'text-forest-deep dark:text-gray-300 hover:text-primary'}`}>
-              Beranda
-            </Link>
-            <Link to="/menu" className={`text-sm font-bold transition-colors tracking-wide ${location.pathname === '/menu' ? 'text-primary' : 'text-forest-deep dark:text-gray-300 hover:text-primary'}`}>
-              Menu
-            </Link>
-            <a href="/#about" className="text-forest-deep dark:text-gray-300 text-sm font-bold hover:text-primary dark:hover:text-gold-aged transition-colors tracking-wide">
-              Tentang Kami
-            </a>
-          </nav>
+        {/* Background Image Container */}
+        <div className="absolute inset-0 w-full h-full">
+          <div 
+            className="absolute inset-0 bg-cover bg-center" 
+            style={{ backgroundImage: `url("/hero-bg.png")` }}
+          ></div>
 
-          <button onClick={toggleTheme} className="p-2 rounded-full bg-black/5 dark:bg-white/5 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all">
-            <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
-          </button>
-
-          <button onClick={() => setIsCartOpen(true)} className="relative p-2 rounded-full bg-primary text-white hover:bg-gold-aged transition-colors shadow-lg shadow-primary/30">
-            <span className="material-symbols-outlined text-xl align-middle">shopping_cart</span>
-            {totalItems > 0 && (
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border-2 border-cream-parchment dark:border-forest-deep">
-                {totalItems}
-              </span>
-            )}
-          </button>
-        </div>
-
-        {/* Mobile Menu & Actions (UPDATED) */}
-        <div className="lg:hidden flex items-center gap-3">
-          {/* Tombol Theme Mobile - DITAMBAHKAN */}
-          <button onClick={toggleTheme} className="p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged">
-            <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
-          </button>
-
-          <button onClick={() => setIsCartOpen(true)} className="relative p-2 text-forest-deep dark:text-gold-aged">
-             <span className="material-symbols-outlined text-2xl">shopping_cart</span>
-             {totalItems > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">{totalItems}</span>}
-          </button>
+          {/* Overlay Gelap (Hanya muncul di Dark Mode agar gambar tidak terlalu terang) */}
+          <div className="absolute inset-0 bg-black/0 dark:bg-black/40 mix-blend-multiply transition-colors duration-500"></div>
           
-          <button className="p-2 text-forest-deep dark:text-text-light" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            <span className="material-symbols-outlined text-3xl">{isMenuOpen ? 'close' : 'menu'}</span>
-          </button>
-        </div>
-      </header>
-
-      {/* --- MOBILE MENU DROPDOWN --- */}
-      {isMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/98 dark:bg-[#052e21]/98 backdrop-blur-xl pt-24 px-6 animate-fade-in-up">
-          <nav className="flex flex-col gap-6 text-center">
-            <Link to="/" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Beranda</Link>
-            <Link to="/menu" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Menu</Link>
-            <a href="/#about" onClick={() => setIsMenuOpen(false)} className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Tentang Kami</a>
-            <button onClick={() => setIsMenuOpen(false)} className="mt-8 text-lg font-bold text-red-500">Tutup Menu</button>
-          </nav>
-        </div>
-      )}
-
-      {/* --- CONTENT AREA (ROUTES) --- */}
-      <div className="flex-grow">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route 
-            path="/menu" 
-            element={<Menu products={products} addToCart={addToCart} />} 
-          />
-        </Routes>
-      </div>
-
-      {/* --- CART & CHECKOUT COMPONENTS (SAMA SEPERTI SEBELUMNYA) --- */}
-      
-      {/* 1. CART DRAWER */}
-      {isCartOpen && (
-        <>
-          <div className="fixed inset-0 bg-black/50 z-[60] backdrop-blur-sm transition-opacity" onClick={() => setIsCartOpen(false)}></div>
-          <div className="fixed top-0 right-0 h-full w-[320px] sm:w-[400px] bg-cream-parchment dark:bg-forest-deep shadow-2xl z-[70] p-6 flex flex-col transition-transform animate-fade-in-up border-l border-gold-aged/20">
-            <div className="flex justify-between items-center mb-6 border-b border-gold-aged/20 pb-4">
-              <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged">Keranjang</h3>
-              <button onClick={() => setIsCartOpen(false)} className="text-secondary hover:text-red-500"><span className="material-symbols-outlined text-2xl">close</span></button>
-            </div>
-            <div className="flex-1 overflow-y-auto space-y-4">
-              {cart.length === 0 ? (
-                <div className="text-center text-gray-400 mt-10">Keranjang kosong.</div>
-              ) : (
-                cart.map((item) => (
-                  <div key={item.id} className="flex gap-4 items-center bg-white/50 dark:bg-black/20 p-3 rounded-lg">
-                    <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded-md" />
-                    <div className="flex-1">
-                      <h4 className="font-bold text-forest-deep dark:text-text-light text-sm">{item.name}</h4>
-                      <p className="text-primary text-sm font-bold">Rp {item.price.toLocaleString('id-ID')}</p>
-                    </div>
-                    <div className="flex items-center gap-2 bg-white dark:bg-forest-deep rounded-full px-2 py-1 border border-gold-aged/30">
-                      <button onClick={() => removeFromCart(item.id)} className="w-5 hover:text-red-500">-</button>
-                      <span className="text-xs font-bold">{item.quantity}</span>
-                      <button onClick={() => addToCart(item)} className="w-5 hover:text-primary">+</button>
-                    </div>
-                  </div>
-                ))
-              )}
-            </div>
-            {cart.length > 0 && (
-              <div className="border-t border-gold-aged/20 pt-4 mt-4">
-                <div className="flex justify-between items-center mb-4 text-forest-deep dark:text-gold-aged font-bold text-lg">
-                  <span>Total:</span>
-                  <span>Rp {totalPrice.toLocaleString('id-ID')}</span>
-                </div>
-                <button 
-                  onClick={() => { setIsCartOpen(false); setIsCheckoutOpen(true); }}
-                  className="w-full py-3 rounded-lg bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all"
-                >
-                  Checkout Sekarang
-                </button>
-              </div>
-            )}
+          {/* --- FOGGY EFFECT (Color Interpolation) --- */}
+          
+          {/* Layer 1: Gradasi Atmosfer */}
+          <div className="absolute inset-0 bg-gradient-to-t 
+            from-cream-parchment via-cream-parchment/60 to-cream-parchment/10
+            dark:from-forest-deep dark:via-forest-deep/50 dark:to-forest-deep/0
+            opacity-100 transition-colors duration-500">
           </div>
-        </>
-      )}
+          
+          {/* Layer 2: Base Blending (Bagian Bawah) */}
+          <div className="absolute bottom-0 left-0 w-full h-[500px] bg-gradient-to-t 
+            from-cream-parchment via-cream-parchment/90 to-cream-parchment/0
+            dark:from-forest-deep dark:via-forest-deep/90 dark:to-forest-deep/0 transition-colors duration-500">
+          </div>
+        </div>
 
-      {/* 2. CHECKOUT FORM POPUP */}
-      {isCheckoutOpen && (
-        <div className="fixed inset-0 z-[90] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsCheckoutOpen(false)}></div>
-          <div className="relative bg-cream-parchment dark:bg-[#0a2e25] p-8 rounded-3xl shadow-2xl max-w-md w-full animate-fade-in-up border border-gold-aged/20">
-            <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 text-center">Data Pemesan</h3>
+        {/* Content */}
+        <div className="relative z-10 text-center max-w-4xl mx-auto p-6 animate-fade-in-up">
+          
+          {/* Badge: Adaptif (Hijau pudar di Light, Putih pudar di Dark) */}
+          <span className="rounded-full px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] mb-6 inline-block shadow-xl backdrop-blur-md
+            bg-forest-deep/10 text-forest-deep border border-forest-deep/20
+            dark:bg-white/10 dark:text-gold-aged dark:border-gold-aged/50 transition-colors duration-500">
+            Kelompok PKKWU
+          </span>
+
+          {/* JUDUL UTAMA: Forest Deep di Light Mode, White di Dark Mode */}
+          <h1 className="text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-sm mb-6 transition-colors duration-500
+            text-forest-deep dark:text-white">
+            Merawat Tradisi, <br/>
+            <span className="text-primary italic">Menyajikan Rasa</span>
+          </h1>
+
+          {/* PARAGRAF: Secondary di Light Mode, Gray di Dark Mode */}
+          <p className="text-lg sm:text-xl font-body font-light leading-relaxed max-w-2xl mx-auto mb-10 drop-shadow-sm transition-colors duration-500
+            text-secondary/90 dark:text-gray-100">
+            Perjalanan kami dalam menggali kembali harta karun kuliner Bumi Gora. Dedikasi untuk melestarikan Kelepon Kecerit dan Es Poteng bagi generasi masa depan.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-5 justify-center">
+            <button onClick={() => navigate('/menu')} className="h-14 min-w-[180px] rounded-full bg-primary px-8 text-white text-lg font-display font-bold shadow-xl shadow-primary/40 transition-all hover:scale-105 hover:bg-gold-aged">
+              Jelajahi Rasa
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* ... (BAGIAN BAWAHNYA BIARKAN TETAP SAMA SEPERTI SEBELUMNYA) ... */}
+      {/* 2. VISI MISI */}
+      <section className="px-4 lg:px-20 py-20 bg-cream-parchment dark:bg-forest-deep relative z-20 -mt-1">
+        <div className="container mx-auto max-w-[900px]">
+          <div className="bg-white/50 dark:bg-black/20 border border-gold-aged/20 rounded-[2rem] p-10 md:p-16 text-center shadow-lg relative backdrop-blur-sm">
+            <span className="text-primary font-bold tracking-widest text-xs uppercase mb-4 block">Visi & Misi</span>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 leading-snug">
+              Mengangkat Kearifan Lokal ke <br/> Panggung Modern
+            </h2>
+            <p className="text-secondary dark:text-gray-300 font-body leading-loose mb-8 text-lg">
+              Kami percaya bahwa kuliner adalah identitas bangsa. Misi kami sederhana: 
+              memastikan cita rasa otentik NTB tidak hilang ditelan zaman, dengan menyajikannya 
+              melalui kemasan dan pendekatan yang higienis, modern, namun tetap berjiwa tradisional.
+            </p>
+            <div className="flex flex-wrap justify-center gap-3">
+              {['#LokalPride', '#WarisanNTB', '#PKKWU'].map((tag) => (
+                <span key={tag} className="px-5 py-2 bg-gold-aged/10 text-forest-deep dark:text-gold-aged rounded-full text-xs font-bold uppercase tracking-wider border border-gold-aged/20">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 3. FILOSOFI KELEPON (No Border, Tilt Animation) */}
+      <section className="py-20 px-6 lg:px-20 bg-cream-parchment dark:bg-forest-deep">
+        <div className="container mx-auto max-w-[1100px]">
+          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
             
-            <form onSubmit={handleSubmitOrder} className="space-y-4">
-              <div>
-                <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Nama Lengkap</label>
-                <input required type="text" value={customerInfo.name} onChange={(e) => setCustomerInfo({...customerInfo, name: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white" />
+            {/* Text Side */}
+            <div className="flex-1 order-2 md:order-1">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-8 h-[2px] bg-primary"></span>
+                <span className="text-primary text-xs font-bold uppercase tracking-widest">Sinah Produk</span>
               </div>
-              <div>
-                <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Email</label>
-                <input required type="email" value={customerInfo.email} onChange={(e) => setCustomerInfo({...customerInfo, email: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white" />
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-forest-deep dark:text-text-light mb-8 leading-tight">
+                Filosofi Kelepon <br/> <span className="italic text-primary">Kecerit</span>
+              </h2>
+              <p className="text-secondary dark:text-gray-300 font-body leading-relaxed mb-6 text-lg">
+                Nama "Kecerit" bukan sekadar label, melainkan pengalaman. Dalam bahasa Sasak, 
+                ini menggambarkan sensasi <span className="font-bold text-primary">meletus</span>-nya gula aren cair saat gigitan pertama.
+              </p>
+              
+              <div className="bg-primary/10 border-l-4 border-primary p-6 rounded-r-xl mt-8">
+                <p className="italic text-forest-deep dark:text-gold-aged font-serif text-lg leading-relaxed">
+                  "Setiap butir kelepon dibuat dengan ketelitian, memastikan gula aren di dalamnya matang sempurna."
+                </p>
+                <div className="mt-4 text-xs font-bold text-primary uppercase tracking-widest">— Bahan Alami</div>
               </div>
-              <div>
-                <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Alamat Lengkap</label>
-                <textarea required rows={3} value={customerInfo.address} onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white resize-none"></textarea>
-              </div>
+            </div>
 
-              <div className="pt-4 flex gap-3">
-                <button type="button" onClick={() => setIsCheckoutOpen(false)} className="flex-1 py-3 rounded-xl border border-gold-aged/50 text-forest-deep dark:text-gold-aged font-bold hover:bg-black/5">Batal</button>
-                <button type="submit" className="flex-1 py-3 rounded-xl bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all">Kirim Order</button>
+            {/* Image Side */}
+            <div className="flex-1 order-1 md:order-2">
+              <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
+                <img 
+                  src="/kelepon.png" 
+                  alt="Filosofi Kelepon" 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
               </div>
-            </form>
+            </div>
+
           </div>
         </div>
-      )}
+      </section>
 
-      {/* 3. FOOTER */}
-      <footer className="bg-forest-deep dark:bg-[#021812] text-white py-16 px-6 lg:px-20 border-t-4 border-primary mt-auto">
-        <div className="container mx-auto max-w-[1200px] text-center md:text-left">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
-            <div>
-              <h3 className="text-xl font-display font-bold text-gold-aged mb-4">Beranda Kuliner NTB</h3>
-              <p className="text-gray-400 text-sm">Menghadirkan kehangatan tradisi Nusa Tenggara Barat ke meja makan Anda.</p>
+      {/* 4. SEJARAH ES POTENG (No Border, Tilt Animation) */}
+      <section className="py-20 px-6 lg:px-20 bg-gold-aged/5 dark:bg-black/10">
+        <div className="container mx-auto max-w-[1100px]">
+          <div className="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+            
+            {/* Image Side */}
+            <div className="flex-1">
+               <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
+                <img 
+                  src="/es-poteng.png" 
+                  alt="Sejarah Es Poteng" 
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent pointer-events-none"></div>
+              </div>
             </div>
-            <div>
-              <h4 className="text-gold-aged font-bold mb-4">Navigasi</h4>
-              <ul className="space-y-2 text-sm text-gray-300">
-                <li><Link to="/" className="hover:text-primary">Beranda</Link></li>
-                <li><Link to="/menu" className="hover:text-primary">Menu</Link></li>
-              </ul>
+
+            {/* Text Side */}
+            <div className="flex-1">
+              <div className="flex items-center gap-3 mb-4">
+                <span className="w-8 h-[2px] bg-primary"></span>
+                <span className="text-primary text-xs font-bold uppercase tracking-widest">Warisan Leluhur</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-display font-bold text-forest-deep dark:text-text-light mb-8 leading-tight">
+                Jejak Sejarah <br/> Es Poteng
+              </h2>
+              <p className="text-secondary dark:text-gray-300 font-body leading-relaxed mb-8 text-lg">
+                Es Poteng adalah bukti kearifan lokal dalam teknik fermentasi. Berawal dari singkong pilihan yang diolah menjadi tape (poteng), hidangan ini telah menjadi penyegar dahaga masyarakat Sasak selama berabad-abad.
+              </p>
+              
+              <div className="grid grid-cols-1 gap-6">
+                <div className="flex gap-4 items-center bg-white dark:bg-white/5 p-4 rounded-xl shadow-sm border border-gold-aged/10">
+                  <div className="bg-forest-deep text-gold-aged w-12 h-12 flex items-center justify-center rounded-full shrink-0">
+                    <span className="material-symbols-outlined">schedule</span>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-forest-deep dark:text-gold-aged font-display text-lg">Fermentasi 3 Hari</h5>
+                    <p className="text-xs text-secondary/70 dark:text-gray-400 uppercase tracking-wider">Waktu Optimal Kematangan</p>
+                  </div>
+                </div>
+                <div className="flex gap-4 items-center bg-white dark:bg-white/5 p-4 rounded-xl shadow-sm border border-gold-aged/10">
+                  <div className="bg-forest-deep text-gold-aged w-12 h-12 flex items-center justify-center rounded-full shrink-0">
+                    <span className="material-symbols-outlined">water_drop</span>
+                  </div>
+                  <div>
+                    <h5 className="font-bold text-forest-deep dark:text-gold-aged font-display text-lg">Air Sumber Alami</h5>
+                    <p className="text-xs text-secondary/70 dark:text-gray-400 uppercase tracking-wider">Kualitas Terbaik</p>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div>
-              <h4 className="text-gold-aged font-bold mb-4">Kontak</h4>
-              <p className="text-sm text-gray-300 mb-2">Email: {adminEmail}</p>
-              <p className="text-sm text-gray-300">Telp: +62 818-0785-2840</p>
-            </div>
-          </div>
-          <div className="mt-12 pt-8 border-t border-white/10 text-xs text-gray-500 text-center">
-            © 2025 Kelompok PKKWU. All rights reserved.
+
           </div>
         </div>
-      </footer>
+      </section>
 
-      {/* 4. BACK TO TOP */}
-      <button onClick={scrollToTop} className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-white shadow-xl transition-all duration-300 transform hover:bg-gold-aged hover:scale-110 ${showBackToTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
-        <span className="material-symbols-outlined text-2xl">arrow_upward</span>
-      </button>
+      {/* 5. KOMITMEN KAMI */}
+      <section className="py-24 px-6 bg-cream-parchment dark:bg-forest-deep">
+        <div className="container mx-auto max-w-4xl text-center">
+            <div className="inline-flex items-center justify-center w-16 h-16 bg-forest-deep text-gold-aged rounded-full mb-8 shadow-xl">
+               <span className="material-symbols-outlined text-3xl">handshake</span>
+            </div>
+            
+            <h2 className="text-4xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6">
+              Komitmen Kami
+            </h2>
+            <p className="text-secondary dark:text-gray-300 font-body leading-loose mb-12 text-lg max-w-2xl mx-auto">
+              Kami bukan sekadar penjual makanan. Kami adalah penjaga cerita. 
+              Setiap porsi yang Anda nikmati adalah dukungan langsung bagi keberlanjutan budaya 
+              kuliner Nusa Tenggara Barat.
+            </p>
 
-    </div>
+            <div className="grid grid-cols-3 gap-8 border-t border-gold-aged/20 pt-10">
+              <div className="flex flex-col items-center gap-2">
+                <h3 className="text-4xl font-display font-bold text-forest-deep dark:text-text-light">100%</h3>
+                <span className="text-[10px] md:text-xs font-bold text-gold-aged uppercase tracking-widest">Bahan Lokal</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <h3 className="text-4xl font-display font-bold text-forest-deep dark:text-text-light">5</h3>
+                <span className="text-[10px] md:text-xs font-bold text-gold-aged uppercase tracking-widest">Anggota Tim</span>
+              </div>
+              <div className="flex flex-col items-center gap-2">
+                <h3 className="text-4xl font-display font-bold text-forest-deep dark:text-text-light">∞</h3>
+                <span className="text-[10px] md:text-xs font-bold text-gold-aged uppercase tracking-widest">Cerita Budaya</span>
+              </div>
+            </div>
+        </div>
+      </section>
+
+      {/* 6. TESTIMONIALS */}
+      <section className="py-24 px-4 lg:px-20 relative overflow-hidden bg-white/50 dark:bg-[#052e21]">
+        <div className="container mx-auto max-w-[1000px]">
+          <div className="text-center mb-16 animate-fade-in-up">
+            <span className="text-primary font-bold tracking-widest text-xs uppercase mb-2 block">
+              Kata Mereka
+            </span>
+            <h2 className="text-3xl sm:text-5xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6">
+              Cerita Pelanggan
+            </h2>
+            <p className="text-secondary/80 dark:text-gray-400 max-w-xl mx-auto font-body">
+              Kepuasan pelanggan adalah prioritas kami. Inilah apa yang mereka rasakan setelah mencicipi kuliner warisan Bumi Gora.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              { 
+                name: 'Andi Pratama', 
+                role: 'Mahasiswa', 
+                text: 'Rasanya otentik banget! Mengingatkan saya pada kampung halaman di Lombok. Keleponnya pecah di mulut!' 
+              },
+              { 
+                name: 'Siti Aminah', 
+                role: 'Ibu Rumah Tangga', 
+                text: 'Es Poteng-nya segar, manisnya pas dan nggak bikin eneg. Anak-anak saya di rumah juga pada suka.' 
+              },
+              { 
+                name: 'Budi Santoso', 
+                role: 'Food Vlogger', 
+                text: 'Salut sama anak muda yang melestarikan kuliner tradisional. Kemasannya juga modern dan higienis. Mantap!' 
+              },
+            ].map((item, idx) => (
+              <div 
+                key={idx} 
+                className="bg-white dark:bg-[#052e21] p-8 rounded-3xl shadow-xl border border-gold-aged/10 hover:-translate-y-2 transition-transform duration-300 flex flex-col"
+              >
+                <div className="flex gap-1 text-primary mb-6">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <span 
+                      key={star} 
+                      className="material-symbols-outlined text-xl" 
+                      style={{ fontVariationSettings: "'FILL' 1" }}
+                    >
+                      star
+                    </span>
+                  ))}
+                </div>
+                
+                <p className="text-secondary dark:text-gray-300 font-body mb-8 italic leading-relaxed flex-1">
+                  "{item.text}"
+                </p>
+                
+                <div className="flex items-center gap-4 mt-auto border-t border-gray-100 dark:border-white/10 pt-6">
+                  <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary font-bold">
+                    {item.name.charAt(0)}
+                  </div>
+                  <div>
+                    <h4 className="font-display font-bold text-lg text-forest-deep dark:text-gold-aged leading-none mb-1">
+                      {item.name}
+                    </h4>
+                    <span className="text-xs text-gray-500 uppercase tracking-wider">
+                      {item.role}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
   );
-}
+};
 
-export default App;
+export default Home;
