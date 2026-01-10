@@ -3,7 +3,7 @@ import { Routes, Route, Link, useLocation } from 'react-router-dom';
 import Home from './pages/Home';
 import Menu from './pages/Menu';
 
-// Tipe Data
+// ... (Interface Product, CartItem, CustomerInfo TETAP SAMA) ...
 interface Product {
   id: string;
   name: string;
@@ -29,16 +29,15 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
-  // State Keranjang & Produk
+  // State Keranjang & Produk (TETAP SAMA)
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false);
-  
   const [customerInfo, setCustomerInfo] = useState<CustomerInfo>({
     name: '', email: '', address: ''
   });
 
-  // DATA PRODUK
+  // DATA PRODUK (TETAP SAMA)
   const products: Product[] = [
     {
       id: 'kelepon',
@@ -79,7 +78,6 @@ function App() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Theme Logic
   const [theme, setTheme] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('theme') || 'light';
@@ -104,37 +102,7 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  // --- LOGIKA WARNA NAVBAR (SOLUSI MASALAH ANDA) ---
-  // Navbar dianggap transparan jika: di Halaman Home DAN belum di-scroll
-  const isHomePage = location.pathname === '/';
-  const isTransparentNav = isHomePage && !scrolled;
-
-  // Kelas dinamis untuk teks Link
-  const getLinkClass = (path: string) => {
-    const isActive = location.pathname === path;
-    const baseClass = "text-sm font-bold transition-colors tracking-wide";
-    
-    if (isActive) return `${baseClass} text-primary`; // Warna Gold kalau aktif
-    
-    // Jika Navbar Transparan (di atas Hero Image), teks jadi Putih
-    if (isTransparentNav) return `${baseClass} text-white hover:text-primary drop-shadow-md`;
-    
-    // Jika Navbar Solid (Scroll atau halaman lain), teks jadi Hijau/Abu
-    return `${baseClass} text-forest-deep dark:text-gray-300 hover:text-primary`;
-  };
-
-  // Kelas dinamis untuk tombol icon (Theme toggle)
-  const iconBtnClass = isTransparentNav
-    ? "p-2 rounded-full bg-white/10 text-white hover:bg-primary transition-all backdrop-blur-sm border border-white/20"
-    : "p-2 rounded-full bg-black/5 dark:bg-white/5 text-forest-deep dark:text-gold-aged border border-transparent dark:border-gold-aged/30 hover:bg-primary hover:text-white transition-all";
-
-  // Kelas dinamis untuk Logo Text
-  const logoTextClass = isTransparentNav
-    ? "hidden sm:block text-white text-lg font-display font-bold leading-tight drop-shadow-md"
-    : "hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight";
-
-
-  // --- CART FUNCTIONS ---
+  // --- LOGIKA CART & CHECKOUT (TETAP SAMA) ---
   const addToCart = (product: Product) => {
     setCart((prevCart) => {
       const existingItem = prevCart.find((item) => item.id === product.id);
@@ -167,11 +135,9 @@ function App() {
   const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
-  // --- CHECKOUT PROCESS ---
   const handleSubmitOrder = (e: React.FormEvent) => {
     e.preventDefault();
     if (cart.length === 0) return;
-
     const subject = `Pesanan Baru dari ${customerInfo.name}`;
     let body = `Halo Admin Beranda Kuliner NTB,\n\nSaya ingin memesan produk berikut:\n\n`;
     cart.forEach((item, index) => {
@@ -179,7 +145,6 @@ function App() {
     });
     body += `\n-----------------------------------\nTOTAL HARGA: Rp ${totalPrice.toLocaleString('id-ID')}\n-----------------------------------\n\n`;
     body += `Data Pemesan:\nNama: ${customerInfo.name}\nEmail: ${customerInfo.email}\nAlamat Pengiriman: ${customerInfo.address}\n\nMohon segera diproses. Terima kasih!`;
-
     window.location.href = `mailto:${adminEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setIsCheckoutOpen(false);
     setIsCartOpen(false);
@@ -192,17 +157,18 @@ function App() {
       <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-10 bg-heritage-pattern z-0 mix-blend-overlay"></div>
       <div className="fixed inset-0 pointer-events-none opacity-0 dark:opacity-100 bg-gradient-to-b from-transparent via-black/20 to-black/60 z-0"></div>
 
-      {/* --- HEADER / NAVBAR --- */}
+      {/* --- HEADER / NAVBAR (DI-UPDATE: Style Konsisten) --- */}
       <header 
         className={`fixed top-0 left-0 w-full z-50 flex items-center justify-between whitespace-nowrap px-6 py-4 lg:px-20 transition-all duration-500 ${
           scrolled 
             ? 'bg-cream-parchment/95 dark:bg-[#052e21]/95 shadow-lg backdrop-blur-md py-3 border-b border-primary/10' 
-            : 'bg-transparent py-5 border-b border-transparent'
+            : 'bg-cream-parchment/50 dark:bg-[#052e21]/50 backdrop-blur-sm py-5 border-b border-transparent' 
+            // ^ Ubah bg-transparent jadi semi-transparent agar teks gelap terbaca
         }`}
       >
         <Link to="/" className="flex items-center gap-3 cursor-pointer group" onClick={scrollToTop}>
           <img src="/logo-fiverr.png" alt="Logo" className="h-10 lg:h-12 w-auto object-contain drop-shadow-sm group-hover:scale-105 transition-transform duration-300" />
-          <h2 className={logoTextClass}>
+          <h2 className="hidden sm:block text-forest-deep dark:text-gold-aged text-lg font-display font-bold leading-tight">
             Beranda Kuliner <br/><span className="text-primary">NTB</span>
           </h2>
         </Link>
@@ -210,20 +176,19 @@ function App() {
         {/* Desktop Menu */}
         <div className="hidden lg:flex flex-1 justify-end gap-6 items-center">
           <nav className="flex items-center gap-8">
-            <Link to="/" className={getLinkClass('/')}>
+            {/* LINK STYLE: Selalu Forest Deep / Gold Aged (Standar) */}
+            <Link to="/" className={`text-sm font-bold transition-colors tracking-wide ${location.pathname === '/' ? 'text-primary' : 'text-forest-deep dark:text-gray-300 hover:text-primary'}`}>
               Beranda
             </Link>
-            <Link to="/menu" className={getLinkClass('/menu')}>
+            <Link to="/menu" className={`text-sm font-bold transition-colors tracking-wide ${location.pathname === '/menu' ? 'text-primary' : 'text-forest-deep dark:text-gray-300 hover:text-primary'}`}>
               Menu
             </Link>
-            {/* Link Tentang Kami */}
-            <a href="/#about" className={isTransparentNav ? "text-sm font-bold text-white hover:text-primary transition-colors tracking-wide drop-shadow-md" : "text-sm font-bold text-forest-deep dark:text-gray-300 hover:text-primary transition-colors tracking-wide"}>
+            <a href="/#about" className="text-forest-deep dark:text-gray-300 text-sm font-bold hover:text-primary dark:hover:text-gold-aged transition-colors tracking-wide">
               Tentang Kami
             </a>
           </nav>
 
-          {/* Theme Toggle Button */}
-          <button onClick={toggleTheme} className={iconBtnClass}>
+          <button onClick={toggleTheme} className="p-2 rounded-full bg-black/5 dark:bg-white/5 text-forest-deep dark:text-gold-aged hover:bg-primary hover:text-white transition-all border border-transparent dark:border-gold-aged/30">
             <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
           </button>
 
@@ -239,22 +204,22 @@ function App() {
 
         {/* Mobile Menu & Actions */}
         <div className="lg:hidden flex items-center gap-3">
-          <button onClick={toggleTheme} className={iconBtnClass}>
+          <button onClick={toggleTheme} className="p-2 rounded-full bg-black/5 dark:bg-white/10 text-forest-deep dark:text-gold-aged">
             <span className="material-symbols-outlined text-xl align-middle">{theme === 'dark' ? 'light_mode' : 'dark_mode'}</span>
           </button>
 
-          <button onClick={() => setIsCartOpen(true)} className={`relative p-2 ${isTransparentNav ? 'text-white' : 'text-forest-deep dark:text-gold-aged'}`}>
+          <button onClick={() => setIsCartOpen(true)} className="relative p-2 text-forest-deep dark:text-gold-aged">
              <span className="material-symbols-outlined text-2xl">shopping_cart</span>
              {totalItems > 0 && <span className="absolute top-0 right-0 bg-red-500 text-white text-[10px] font-bold h-4 w-4 flex items-center justify-center rounded-full">{totalItems}</span>}
           </button>
           
-          <button className={`p-2 ${isTransparentNav ? 'text-white' : 'text-forest-deep dark:text-text-light'}`} onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="p-2 text-forest-deep dark:text-text-light" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             <span className="material-symbols-outlined text-3xl">{isMenuOpen ? 'close' : 'menu'}</span>
           </button>
         </div>
       </header>
 
-      {/* --- MOBILE MENU DROPDOWN --- */}
+      {/* --- MENU & CONTENT LAINNYA TETAP SAMA ... --- */}
       {isMenuOpen && (
         <div className="lg:hidden fixed inset-0 z-40 bg-cream-parchment/98 dark:bg-[#052e21]/98 backdrop-blur-xl pt-24 px-6 animate-fade-in-up">
           <nav className="flex flex-col gap-6 text-center">
@@ -266,18 +231,14 @@ function App() {
         </div>
       )}
 
-      {/* --- CONTENT AREA (ROUTES) --- */}
       <div className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route 
-            path="/menu" 
-            element={<Menu products={products} addToCart={addToCart} />} 
-          />
+          <Route path="/menu" element={<Menu products={products} addToCart={addToCart} />} />
         </Routes>
       </div>
 
-      {/* --- GLOBAL COMPONENTS (Footer, Cart, Modals) --- */}
+      {/* ... CART, CHECKOUT, FOOTER SAMA SEPERTI SEBELUMNYA ... */}
       
       {/* 1. CART DRAWER */}
       {isCartOpen && (
@@ -332,7 +293,6 @@ function App() {
           <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={() => setIsCheckoutOpen(false)}></div>
           <div className="relative bg-cream-parchment dark:bg-[#0a2e25] p-8 rounded-3xl shadow-2xl max-w-md w-full animate-fade-in-up border border-gold-aged/20">
             <h3 className="text-2xl font-display font-bold text-forest-deep dark:text-gold-aged mb-6 text-center">Data Pemesan</h3>
-            
             <form onSubmit={handleSubmitOrder} className="space-y-4">
               <div>
                 <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Nama Lengkap</label>
@@ -346,7 +306,6 @@ function App() {
                 <label className="block text-sm font-bold text-forest-deep dark:text-gray-300 mb-1">Alamat Lengkap</label>
                 <textarea required rows={3} value={customerInfo.address} onChange={(e) => setCustomerInfo({...customerInfo, address: e.target.value})} className="w-full px-4 py-3 rounded-xl bg-white dark:bg-black/30 border border-gold-aged/30 outline-none dark:text-white resize-none"></textarea>
               </div>
-
               <div className="pt-4 flex gap-3">
                 <button type="button" onClick={() => setIsCheckoutOpen(false)} className="flex-1 py-3 rounded-xl border border-gold-aged/50 text-forest-deep dark:text-gold-aged font-bold hover:bg-black/5">Batal</button>
                 <button type="submit" className="flex-1 py-3 rounded-xl bg-primary text-white font-bold shadow-lg hover:bg-gold-aged transition-all">Kirim Order</button>
