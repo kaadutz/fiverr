@@ -114,11 +114,18 @@ const Menu = ({ products, addToCart }: MenuProps) => {
             return (
               <div 
                 key={product.id} 
-                // --- FIX BORDER KOTAK SAAT HOVER ---
-                // Style ini memaksa browser merender clipping mask dengan benar
-                style={{ WebkitMaskImage: '-webkit-radial-gradient(white, black)' }}
+                // --- FIX BORDER FLICKERING/SQUARE ---
+                // translateZ(0) memaksa hardware acceleration
+                // backfaceVisibility hidden menyembunyikan sisi belakang elemen saat animasi
+                // WebkitMaskImage memastikan clipping radius tetap terjadi
+                style={{ 
+                  WebkitMaskImage: '-webkit-radial-gradient(white, black)',
+                  transform: 'translateZ(0)', 
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  ...(!animateCards ? { transitionDelay: `${idx * 100}ms` } : {})
+                }}
                 className={`group bg-white dark:bg-[#082f25] rounded-[2rem] shadow-xl border border-gold-aged/10 overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${animateCards ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                style={!animateCards ? { transitionDelay: `${idx * 100}ms` } : { WebkitMaskImage: '-webkit-radial-gradient(white, black)' }}
               >
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => setSelectedProduct(product)}>
