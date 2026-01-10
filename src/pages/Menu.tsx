@@ -69,7 +69,7 @@ const Menu = ({ products, addToCart }: MenuProps) => {
       
       {/* 1. HERO MENU (Agar Navbar Transparan terlihat bagus) */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/bahan.png")` }}>
           <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
           {/* Foggy Gradient Menu */}
           <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
