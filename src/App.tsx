@@ -24,7 +24,7 @@ function App() {
   const [scrolled, setScrolled] = useState(false);
   const [showBackToTop, setShowBackToTop] = useState(false);
   
-  // State Keranjang & Tema (Tidak ada lagi state Checkout/CustomerInfo)
+  // State Keranjang & Tema
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   
@@ -56,8 +56,10 @@ function App() {
     }
   ];
 
-  // --- KONTAK ADMIN (HANYA WA) ---
+  // --- KONTAK ADMIN ---
+  // Variabel ini DIKEMBALIKAN agar error hilang dan bisa tampil di footer
   const adminWaNumber = "6281807852840"; 
+  const adminEmail = "admin@kulinerntb.id"; 
 
   // --- LOGIKA PROGRAM ---
 
@@ -156,7 +158,7 @@ function App() {
   const totalPrice = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
   const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
 
-  // --- LOGIKA ORDER LANGSUNG KE WHATSAPP (TANPA FORM) ---
+  // --- LOGIKA ORDER LANGSUNG KE WHATSAPP ---
   const handleDirectWhatsAppOrder = () => {
     if (cart.length === 0) return;
 
@@ -324,7 +326,8 @@ function App() {
             </div>
             <div>
               <h4 className="text-gold-aged font-bold mb-4">Kontak</h4>
-              {/* Email dihapus dari tampilan footer agar konsisten WA only */}
+              {/* Email ditampilkan kembali */}
+              <p className="text-sm text-gray-300 mb-2">Email: {adminEmail}</p>
               <p className="text-sm text-gray-300">WA Admin: +{adminWaNumber}</p>
             </div>
           </div>
