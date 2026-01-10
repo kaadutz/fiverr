@@ -31,7 +31,7 @@ const Home = () => {
           <span className="rounded-full px-6 py-2 text-xs font-display font-bold uppercase tracking-[0.2em] mb-6 inline-block shadow-xl backdrop-blur-md
             bg-gold-aged/10 text-gold-aged border border-gold-aged/50
             transition-colors duration-500">
-            Kelompok PKKWU
+            Perkenalan
           </span>
           <h1 className="text-white text-5xl md:text-7xl font-display font-extrabold leading-tight tracking-tight drop-shadow-2xl mb-6">
             Merawat Tradisi, <br/>
@@ -222,17 +222,17 @@ const Home = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {[
               { 
-                name: 'Andi Pratama', 
-                role: 'Mahasiswa', 
+                name: 'Bramasta Raditya Rochim', 
+                role: 'Pelajar', 
                 text: 'Rasanya otentik banget! Mengingatkan saya pada kampung halaman di Lombok. Keleponnya pecah di mulut!' 
               },
               { 
-                name: 'Siti Aminah', 
+                name: 'Mega', 
                 role: 'Ibu Rumah Tangga', 
                 text: 'Es Poteng-nya segar, manisnya pas dan nggak bikin eneg. Anak-anak saya di rumah juga pada suka.' 
               },
               { 
-                name: 'Budi Santoso', 
+                name: 'Murintow', 
                 role: 'Food Vlogger', 
                 text: 'Salut sama anak muda yang melestarikan kuliner tradisional. Kemasannya juga modern dan higienis. Mantap!' 
               },
