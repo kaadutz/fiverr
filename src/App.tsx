@@ -43,7 +43,7 @@ function App() {
       id: 'kelepon',
       name: 'Kelepon Kecerit',
       price: 15000,
-      image: '/kelepon.png',
+      image: '/keleponcu.png',
       category: 'Makanan Ringan',
       description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair asli. Sensasi "kecerit" (meletus) saat digigit.'
     },
@@ -59,7 +59,7 @@ function App() {
       id: 'paket-hemat',
       name: 'Paket Beranda',
       price: 25000,
-      image: '/hero-bg.png', 
+      image: '/paket.png', 
       category: 'Paket Hemat',
       description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
     }
