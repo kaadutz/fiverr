@@ -67,16 +67,17 @@ const Menu = ({ products, addToCart }: MenuProps) => {
   return (
     <div className="min-h-screen relative bg-cream-parchment dark:bg-forest-deep transition-colors duration-500">
       
-      {/* 1. HERO MENU (Penting agar Navbar Transparan terlihat bagus) */}
+      {/* 1. HERO MENU (Agar Navbar Transparan terlihat bagus) */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/hero-bg.png")` }}>
           <div className="absolute inset-0 bg-black/50 mix-blend-multiply"></div>
+          {/* Foggy Gradient Menu */}
           <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
         <div className="relative z-10 text-center px-4 animate-fade-in-up pt-10">
           <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged/50 bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md">
-  <span className="material-symbols-outlined text-sm">restaurant_menu</span> Katalog Rasa
-</div>
+            <span className="material-symbols-outlined text-sm">restaurant_menu</span> Katalog Rasa
+          </div>
           <h1 className="text-4xl md:text-6xl font-display font-extrabold text-white mb-4 drop-shadow-lg">
             Jelajahi Menu Kami
           </h1>
@@ -113,8 +114,11 @@ const Menu = ({ products, addToCart }: MenuProps) => {
             return (
               <div 
                 key={product.id} 
+                // --- FIX BORDER KOTAK SAAT HOVER ---
+                // Style ini memaksa browser merender clipping mask dengan benar
+                style={{ WebkitMaskImage: '-webkit-radial-gradient(white, black)' }}
                 className={`group bg-white dark:bg-[#082f25] rounded-[2rem] shadow-xl border border-gold-aged/10 overflow-hidden flex flex-col transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl ${animateCards ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
-                style={{ transitionDelay: `${idx * 100}ms` }}
+                style={!animateCards ? { transitionDelay: `${idx * 100}ms` } : { WebkitMaskImage: '-webkit-radial-gradient(white, black)' }}
               >
                 {/* Image */}
                 <div className="relative h-64 overflow-hidden cursor-pointer" onClick={() => setSelectedProduct(product)}>
