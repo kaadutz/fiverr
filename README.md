@@ -93,7 +93,7 @@ Ikuti langkah ini untuk menjalankan website di komputer lokal:
 
 ## 🎨 Kredit Aset
 
-* **Foto Produk & Hero**: Dibuat menggunakan **AI Generative** (Neo Banana) dengan *prompt engineering* khusus untuk mendapatkan visual makanan tradisional yang realistis.
+* **Foto Produk**: Dibuat menggunakan **AI Generative** (Neo Banana) dengan *prompt engineering* khusus untuk mendapatkan visual makanan tradisional yang realistis.
 * **Logo**: Desain original kelompok.
 
 ---
