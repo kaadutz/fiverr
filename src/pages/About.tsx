@@ -17,7 +17,7 @@ const About = () => {
       {/* 1. HERO SECTION (Kembali ke Background Abstrak/Pemandangan agar Teks Jelas) */}
       <section className="relative h-[50vh] min-h-[400px] flex items-center justify-center overflow-hidden">
         {/* Menggunakan hero-bg.png lagi supaya bersih */}
-        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/sekolahbg.png")` }}>
+        <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url("/sekolahbg.jpg")` }}>
           <div className="absolute inset-0 bg-black/60 mix-blend-multiply"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
