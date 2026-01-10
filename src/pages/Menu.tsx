@@ -74,9 +74,9 @@ const Menu = ({ products, addToCart }: MenuProps) => {
           <div className="absolute inset-0 bg-gradient-to-t from-cream-parchment dark:from-forest-deep to-transparent"></div>
         </div>
         <div className="relative z-10 text-center px-4 animate-fade-in-up pt-10">
-          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-white/30 bg-white/10 text-white text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md">
-            <span className="material-symbols-outlined text-sm">restaurant_menu</span> Katalog Rasa
-          </div>
+          <div className="inline-flex items-center gap-2 px-4 py-1 rounded-full border border-gold-aged/50 bg-gold-aged/10 text-gold-aged text-xs font-bold uppercase tracking-widest mb-4 backdrop-blur-md">
+  <span className="material-symbols-outlined text-sm">restaurant_menu</span> Katalog Rasa
+</div>
           <h1 className="text-4xl md:text-6xl font-display font-extrabold text-white mb-4 drop-shadow-lg">
             Jelajahi Menu Kami
           </h1>
