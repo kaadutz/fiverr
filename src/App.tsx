@@ -29,31 +29,31 @@ function App() {
   const [cart, setCart] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   
-  // DATA PRODUK MASTER
+  // DATA PRODUK MASTER (UPDATE HARGA BARU)
   const products: Product[] = [
     {
       id: 'kelepon',
-      name: 'Kelepon Kecerit',
-      price: 15000,
+      name: 'Kelepon Kecerit (Isi 4)',
+      price: 8000, // Harga baru
       image: '/keleponcu.png',
       category: 'Makanan Ringan',
-      description: 'Kelepon Kecerit adalah camilan tradisional khas Lombok yang terbuat dari tepung ketan berisi gula aren cair asli. Sensasi "kecerit" (meletus) saat digigit.'
+      description: 'Satu porsi berisi 4 butir Kelepon Kecerit khas Lombok. Terbuat dari tepung ketan dengan isian gula aren cair asli yang meletus saat digigit.'
     },
     {
       id: 'es-poteng',
       name: 'Es Poteng',
-      price: 12000,
-      image: '/cupoteng.png',
+      price: 5000, // Harga baru
+      image: '/es-poteng.png',
       category: 'Minuman & Dessert',
-      description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) pilihan yang difermentasi dengan ragi tradisional. Disajikan dingin dengan es serut.'
+      description: 'Es Poteng segar dengan isian tape singkong fermentasi pilihan, disajikan dingin dengan es serut, sirup cocopandan merah, dan susu kental manis.'
     },
     {
       id: 'paket-hemat',
-      name: 'Paket',
-      price: 25000,
-      image: '/pakett.png', 
+      name: 'Paket Hemat (Kelepon + Es Poteng)',
+      price: 12000, // Harga paket
+      image: '/paket.png', 
       category: 'Paket Hemat',
-      description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
+      description: 'Lebih hemat! Dapatkan 1 porsi Kelepon Kecerit (isi 4) dan 1 gelas Es Poteng segar. Perpaduan sempurna camilan hangat dan minuman dingin.'
     }
   ];
 
@@ -178,6 +178,11 @@ function App() {
     // Tutup keranjang
     setIsCartOpen(false);
   };
+
+  // --- LOGIKA TOMBOL TANYA WA (Customer Service) ---
+  const csWaNumber = "6281807852840"; // Nomor yang Anda berikan
+  const csMessage = "Halo Admin, saya ingin bertanya seputar produk Five'r.";
+  const csWaLink = `https://wa.me/${csWaNumber}?text=${encodeURIComponent(csMessage)}`;
 
   return (
     <div className="bg-cream-parchment dark:bg-forest-deep font-body text-secondary dark:text-text-light antialiased min-h-screen selection:bg-primary selection:text-white transition-colors duration-500 relative flex flex-col">
@@ -331,9 +336,26 @@ function App() {
         </div>
       </footer>
 
+      {/* --- TOMBOL BACK TO TOP (KANAN BAWAH) --- */}
       <button onClick={scrollToTop} className={`fixed bottom-6 right-6 z-50 p-3 rounded-full bg-primary text-white shadow-xl transition-all duration-300 transform hover:bg-gold-aged hover:scale-110 ${showBackToTop ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0'}`}>
         <span className="material-symbols-outlined text-2xl">arrow_upward</span>
       </button>
+
+      {/* --- TOMBOL FLOATING WA (KIRI BAWAH) --- */}
+      <a 
+        href={csWaLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="fixed bottom-6 left-6 z-50 flex items-center gap-2 p-3 pr-5 rounded-full bg-[#25D366] text-white shadow-xl transition-all duration-300 transform hover:scale-105 hover:bg-[#20bd5a] group cursor-pointer border-2 border-white/20"
+        aria-label="Hubungi Admin via WhatsApp"
+      >
+        <span className="material-symbols-outlined text-2xl md:text-3xl animate-bounce">support_agent</span>
+        <div className="flex flex-col">
+          <span className="text-[10px] uppercase font-bold text-white/90 leading-none mb-0.5">Butuh Bantuan?</span>
+          <span className="text-sm font-bold leading-none">Chat Admin</span>
+        </div>
+      </a>
+
     </div>
   );
 }
