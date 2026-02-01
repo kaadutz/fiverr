@@ -124,7 +124,7 @@ const Home = () => {
             <div className="flex-1">
                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl -rotate-2 hover:rotate-0 transition-transform duration-500 h-[400px] md:h-[500px] group">
                 <img 
-                  src="/es-poteng.png" 
+                  src="/poteng1.png" 
                   alt="Sejarah Es Poteng" 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
                 />
