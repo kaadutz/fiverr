@@ -81,7 +81,7 @@ const Home = () => {
             <div className="flex-1 order-2 md:order-1">
               <div className="flex items-center gap-3 mb-4">
                 <span className="w-8 h-[2px] bg-primary"></span>
-                <span className="text-primary text-xs font-bold uppercase tracking-widest">Sinah Produk</span>
+                <span className="text-primary text-xs font-bold uppercase tracking-widest">Orientasi Produk</span>
               </div>
               <h2 className="text-4xl md:text-5xl font-display font-bold text-forest-deep dark:text-text-light mb-8 leading-tight">
                 Filosofi Kelepon <br/> <span className="italic text-primary">Kecerit</span>
