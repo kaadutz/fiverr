@@ -43,7 +43,7 @@ function App() {
       id: 'es-poteng',
       name: 'Es Poteng',
       price: 5000, // Harga baru
-      image: '/es-poteng.png',
+      image: '/cupoteng.png',
       category: 'Minuman & Dessert',
       description: 'Es Poteng segar dengan isian tape singkong fermentasi pilihan, disajikan dingin dengan es serut, sirup cocopandan merah, dan susu kental manis.'
     },
@@ -51,7 +51,7 @@ function App() {
       id: 'paket-hemat',
       name: 'Paket Hemat (Kelepon + Es Poteng)',
       price: 12000, // Harga paket
-      image: '/paket.png', 
+      image: '/pakett.png', 
       category: 'Paket Hemat',
       description: 'Lebih hemat! Dapatkan 1 porsi Kelepon Kecerit (isi 4) dan 1 gelas Es Poteng segar. Perpaduan sempurna camilan hangat dan minuman dingin.'
     }
