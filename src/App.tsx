@@ -43,7 +43,7 @@ function App() {
       id: 'es-poteng',
       name: 'Es Poteng',
       price: 12000,
-      image: '/keleponcu.png',
+      image: '/cupoteng.png',
       category: 'Minuman & Dessert',
       description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) pilihan yang difermentasi dengan ragi tradisional. Disajikan dingin dengan es serut.'
     },
