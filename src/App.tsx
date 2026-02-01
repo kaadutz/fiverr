@@ -43,7 +43,7 @@ function App() {
       id: 'es-poteng',
       name: 'Es Poteng',
       price: 12000,
-      image: '/es-poteng.png',
+      image: '/keleponcu.png',
       category: 'Minuman & Dessert',
       description: 'Es Poteng adalah hidangan penutup segar berupa tape singkong (poteng) pilihan yang difermentasi dengan ragi tradisional. Disajikan dingin dengan es serut.'
     },
@@ -51,7 +51,7 @@ function App() {
       id: 'paket-hemat',
       name: 'Paket',
       price: 25000,
-      image: '/paket.png', 
+      image: '/pakett.png', 
       category: 'Paket Hemat',
       description: 'Paket hemat spesial berisi 1 porsi Kelepon Kecerit dan 1 mangkuk Es Poteng. Cara terbaik untuk menikmati kedua hidangan legendaris.'
     }
